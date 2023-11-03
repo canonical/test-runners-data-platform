@@ -125,7 +125,9 @@ def main():
     release_artifacts = pathlib.Path("~/charmcraftcache-hub-ci/release/").expanduser()
     release_artifacts.mkdir(parents=True)
     with open(release_artifacts / "dependencies_by_charm.json", "w") as file:
-        json.dump(serializable_dependencies, file, indent=2)
+        json.dump(
+            {"version": 1, "dependencies": serializable_dependencies}, file, indent=2
+        )
     # Rename .whl files to include relative path from `~/charmcraftcache-hub-ci/build/pip/wheels/`
     for wheel in (pip_cache / "pip/wheels/").glob("**/*.whl"):
         # Example:
