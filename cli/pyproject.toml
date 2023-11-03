@@ -5,6 +5,9 @@ description = ""
 authors = ["Carl Csaposs <carl.csaposs@canonical.com>"]
 readme = "README.md"
 
+[tool.poetry.scripts]
+build = "cli.build:main"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 
