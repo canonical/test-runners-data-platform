@@ -23,9 +23,7 @@ jobs:
       - name: Build wheels from source
         run: build charms.json
       - name: Create GitHub release
-        run: |
-          shopt -s globstar
-          gh release create "build-$(date +%s)" ~/charmcraftcache-hub-ci/release/*
+        run: gh release create "build-$(date +%s)" ~/charmcraftcache-hub-ci/release/*
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
