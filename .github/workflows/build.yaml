@@ -20,6 +20,8 @@ jobs:
         run: |
           python3 -m pip install pipx
           python3 -m pipx ensurepath
+      - name: Install poetry
+        run: pipx install poetry
       - name: Install CLI
         run: pipx install ./cli/
       - run: build charms.json
