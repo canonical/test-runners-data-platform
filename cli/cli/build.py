@@ -122,7 +122,7 @@ def main():
         serializable_dependencies[str(dataclasses.asdict(charm))] = [
             dataclasses.asdict(dependency) for dependency in dependencies
         ]
-    release_artifacts = pathlib.Path("~/charmcraftcache-hub-ci/release/")
+    release_artifacts = pathlib.Path("~/charmcraftcache-hub-ci/release/").expanduser()
     release_artifacts.mkdir(parents=True)
     with open(release_artifacts / "dependencies_by_charm.json", "w") as file:
         json.dump(serializable_dependencies, file, indent=2)
