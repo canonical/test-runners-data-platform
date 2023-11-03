@@ -117,16 +117,18 @@ def main():
             )
             for dependency in report["install"]
         }
+    release_artifacts = pathlib.Path("~/charmcraftcache-hub-ci/release/").expanduser()
+    release_artifacts.mkdir(parents=True)
     serializable_dependencies = {}
     for charm, dependencies in dependencies_by_charm.items():
         serializable_dependencies[str(dataclasses.asdict(charm))] = [
             dataclasses.asdict(dependency) for dependency in dependencies
         ]
-    release_artifacts = pathlib.Path("~/charmcraftcache-hub-ci/release/").expanduser()
-    release_artifacts.mkdir(parents=True)
-    with open(release_artifacts / "dependencies_by_charm.json", "w") as file:
+    with open(release_artifacts / "manifest.json", "w") as file:
         json.dump(
-            {"version": 1, "dependencies": serializable_dependencies}, file, indent=2
+            {"version": 1, "dependencies_by_charm": serializable_dependencies},
+            file,
+            indent=2,
         )
     # Rename .whl files to include relative path from `~/charmcraftcache-hub-ci/build/pip/wheels/`
     for wheel in (pip_cache / "pip/wheels/").glob("**/*.whl"):
