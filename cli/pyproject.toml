@@ -12,6 +12,9 @@ build = "cli.build:main"
 python = "^3.10"
 
 
+[tool.poetry.group.format.dependencies]
+black = "^23.10.1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
