@@ -12,6 +12,8 @@ jobs:
     name: Build & release wheels
     runs-on: ubuntu-latest
     steps:
+      - name: Update pip
+        run: pip install --upgrade pip
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install poetry
