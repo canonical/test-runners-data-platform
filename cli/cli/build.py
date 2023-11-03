@@ -60,8 +60,8 @@ class Dependency:
 
 
 def main():
-    pip_cache = pathlib.Path("~/charmcraftcache-hub-build/").expanduser()
-    pip_cache.mkdir()
+    pip_cache = pathlib.Path("~/charmcraftcache-hub/build/").expanduser()
+    pip_cache.mkdir(parents=True)
     parser = argparse.ArgumentParser()
     parser.add_argument("charms_file")
     args = parser.parse_args()
@@ -122,14 +122,19 @@ def main():
         serializable_dependencies[str(dataclasses.asdict(charm))] = [
             dataclasses.asdict(dependency) for dependency in dependencies
         ]
-    with open("dependencies_by_charm.json", "w") as file:
+    release_artifacts = pathlib.Path("~/charmcraftcache-hub/release-artifacts/")
+    release_artifacts.mkdir(parents=True)
+    with open(release_artifacts / "dependencies_by_charm.json", "w") as file:
         json.dump(serializable_dependencies, file, indent=2)
-    # Rename .whl files to include relative path from `~/charmcraftcache-hub-build/pip/wheels/`
+    # Rename .whl files to include relative path from `~/charmcraftcache-hub/build/pip/wheels/`
     for wheel in (pip_cache / "pip/wheels/").glob("**/*.whl"):
         # Example:
-        # `~/charmcraftcache-hub-build/pip/wheels/a6/bb/99/9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6/setuptools-68.2.2-py3-none-any.whl`
+        # `~/charmcraftcache-hub/build/pip/wheels/a6/bb/99/9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6/setuptools-68.2.2-py3-none-any.whl`
         # is moved to
-        # `~/charmcraftcache-hub-build/pip/wheels/setuptools-68.2.2-py3-none-any.whl.a6_bb_99_9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6.charmcraftcachehub`
+        # `~/charmcraftcache-hub/release-artifacts/setuptools-68.2.2-py3-none-any.whl.a6_bb_99_9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6.charmcraftcachehub`
         wheel.rename(
-            f'{wheel.name}.{str(wheel.parent).replace("/", "_")}.charmcraftcachehub'
+            pathlib.PurePath(
+                release_artifacts,
+                f'{wheel.name}.{str(wheel.parent).replace("/", "_")}.charmcraftcachehub',
+            )
         )

@@ -22,12 +22,10 @@ jobs:
         run: pipx install ./cli/
       - name: Build wheels from source
         run: build charms.json
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
       - name: Create GitHub release
         run: |
           shopt -s globstar
-          gh release create "build-$(date +%s)" dependencies_by_charm.json ~/charmcraftcache-hub-build/pip/wheels/*.charmcraftcachehub
+          gh release create "build-$(date +%s)" ~/charmcraftcache-hub/release-artifacts/*
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
