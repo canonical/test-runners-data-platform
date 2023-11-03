@@ -27,3 +27,5 @@ jobs:
       - name: Install CLI
         run: pipx install ./cli/
       - run: build charms.json
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1

@@ -107,3 +107,5 @@ def main():
             for dependency in report["install"]
         }
     print(dependencies)
+    with open("dependencies.json", "w") as file:
+        json.dump(dependencies, file)
