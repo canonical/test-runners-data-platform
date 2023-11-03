@@ -22,6 +22,8 @@ jobs:
         run: pipx install ./cli/
       - name: Build wheels from source
         run: build charms.json
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
       - name: Create GitHub release
         run: |
           shopt -s globstar
