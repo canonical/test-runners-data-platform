@@ -20,13 +20,13 @@ jobs:
         run: pipx install poetry
       - name: Install CLI
         run: pipx install ./cli/
-      - run: build charms.json
-      - uses: actions/upload-artifact@v3
-        with:
-          name: debug
-          path: dependencies_by_charm.json
-      - run: |
+      - name: Build wheels from source
+        run: build charms.json
+      - name: Create release
+        run: |
           shopt -s globstar
           gh release create 1 dependencies_by_charm.json ~/charmcraftcache-hub-build/pip/wheels/**/*.whl
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write  # Needed to create release
