@@ -1,5 +1,6 @@
 import argparse
 import json
+import tomllib
 
 import requests
 
@@ -13,5 +14,6 @@ def main():
     for url in charm_lock_files:
         response = requests.get(url)
         response.raise_for_status()
-        lock_file = response.text
-        print(lock_file)
+        poetry_lock_file = response.text
+        foo = tomllib.loads(poetry_lock_file)
+        print(foo)
