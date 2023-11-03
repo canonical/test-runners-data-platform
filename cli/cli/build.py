@@ -107,9 +107,9 @@ def main():
             for dependency in report["install"]
         }
     serializable_dependencies = {}
-    for charm in dependencies:
+    for charm, charm_dependencies in dependencies.items():
         serializable_dependencies[str(dataclasses.asdict(charm))] = [
-            dataclasses.asdict(dependency) for dependency in dependencies
+            dataclasses.asdict(dependency) for dependency in charm_dependencies
         ]
     with open("dependencies.json", "w") as file:
         json.dump(serializable_dependencies, file, indent=2)
