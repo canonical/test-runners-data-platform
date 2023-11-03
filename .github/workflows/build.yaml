@@ -25,7 +25,7 @@ jobs:
       - name: Create release
         run: |
           shopt -s globstar
-          gh release create 1 dependencies_by_charm.json ~/charmcraftcache-hub-build/pip/wheels/**/*.whl
+          gh release create "build-$(date +%s)" dependencies_by_charm.json ~/charmcraftcache-hub-build/pip/wheels/**/*.whl
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
