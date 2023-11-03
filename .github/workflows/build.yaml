@@ -22,7 +22,7 @@ jobs:
         run: pipx install ./cli/
       - name: Build wheels from source
         run: build charms.json
-      - name: Create release
+      - name: Create GitHub release
         run: |
           shopt -s globstar
           gh release create "build-$(date +%s)" dependencies_by_charm.json ~/charmcraftcache-hub-build/pip/wheels/*.charmcraftcachehub
