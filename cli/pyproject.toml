@@ -10,6 +10,7 @@ build = "cli.build:main"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+requests = "^2.31.0"
 
 
 [tool.poetry.group.format.dependencies]
