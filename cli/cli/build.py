@@ -86,7 +86,7 @@ def main():
                 "--no-binary",
                 ":all:",
                 # Cache will still be hit if exact version of wheel available
-                # Needed:
+                # `--ignore-installed` needed:
                 # - to ignore non-exact versions
                 # - to include all dependencies in report
                 "--ignore-installed",
@@ -106,4 +106,10 @@ def main():
             )
             for dependency in report["install"]
         }
-    print(dependencies)
+    serializable_dependencies = {}
+    for charm in dependencies:
+        serializable_dependencies[str(dataclasses.asdict(charm))] = [
+            dataclasses.asdict(dependency) for dependency in dependencies
+        ]
+    with open("dependencies.json", "w") as file:
+        json.dump(serializable_dependencies, file, indent=2)
