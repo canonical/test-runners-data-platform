@@ -21,21 +21,32 @@ class Charm:
             self._repository_directory.mkdir(parents=True)
         except FileExistsError:
             commands = [
-                f"git fetch origin {self.ref}",
-                "git checkout FETCH_HEAD",
+                ["git", "fetch", "origin", self.ref],
+                ["git", "checkout", "FETCH_HEAD"],
             ]
         else:
             commands = [
-                "git init",
-                f"git sparse-checkout set --sparse-index {self.relative_path_to_charmcraft_yaml}",
-                f"git remote add --fetch origin https://github.com/{self.github_repository}.git",
-                f"git fetch origin {self.ref}",
-                "git checkout FETCH_HEAD",
+                ["git", "init"],
+                [
+                    "git",
+                    "sparse-checkout",
+                    "set",
+                    "--sparse-index",
+                    self.relative_path_to_charmcraft_yaml,
+                ],
+                [
+                    "git",
+                    "remote",
+                    "add",
+                    "--fetch",
+                    "origin",
+                    f"https://github.com/{self.github_repository}.git",
+                ],
+                ["git", "fetch", "origin", self.ref],
+                ["git", "checkout", "FETCH_HEAD"],
             ]
         for command in commands:
-            subprocess.run(
-                command.split(" "), cwd=self._repository_directory, check=True
-            )
+            subprocess.run(command, cwd=self._repository_directory, check=True)
 
     @property
     def directory(self) -> pathlib.Path:
