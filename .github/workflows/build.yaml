@@ -16,4 +16,4 @@ jobs:
         uses: actions/checkout@v4
       - name: Install CLI
         run: pipx install ./cli/
-      - run: build
+      - run: build charms.json
