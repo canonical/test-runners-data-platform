@@ -56,7 +56,7 @@ def main():
     args = parser.parse_args()
     with open(args.charms_file, "r") as file:
         charms = [Charm(**charm) for charm in json.load(file)]
-    dependencies: dict[Charm, set[Dependency]] = {}
+    dependencies_by_charm: dict[Charm, set[Dependency]] = {}
     for charm in charms:
         charm.checkout_repository()
         assert (charm.directory / "poetry.lock").exists()
@@ -73,7 +73,7 @@ def main():
             cwd=charm.directory,
             check=True,
         )
-        # Build wheels from source
+
         env = os.environ
         env["XDG_CACHE_HOME"] = str(pip_cache)
         subprocess.run(
@@ -82,7 +82,7 @@ def main():
                 "install",
                 "-r",
                 "requirements.txt",
-                # Build from source
+                # Build wheels from source
                 "--no-binary",
                 ":all:",
                 # Cache will still be hit if exact version of wheel available
@@ -99,7 +99,7 @@ def main():
         )
         with open(charm.directory / "report.json", "r") as file:
             report = json.load(file)
-        dependencies[charm] = {
+        dependencies_by_charm[charm] = {
             Dependency(
                 name=dependency["metadata"]["name"],
                 version=dependency["metadata"]["version"],
@@ -107,9 +107,9 @@ def main():
             for dependency in report["install"]
         }
     serializable_dependencies = {}
-    for charm, charm_dependencies in dependencies.items():
+    for charm, dependencies in dependencies_by_charm.items():
         serializable_dependencies[str(dataclasses.asdict(charm))] = [
-            dataclasses.asdict(dependency) for dependency in charm_dependencies
+            dataclasses.asdict(dependency) for dependency in dependencies
         ]
-    with open("dependencies.json", "w") as file:
+    with open("dependencies_by_charm.json", "w") as file:
         json.dump(serializable_dependencies, file, indent=2)

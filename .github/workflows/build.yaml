@@ -24,4 +24,9 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: debug
-          path: dependencies.json
+          path: dependencies_by_charm.json
+      - run: |
+          shopt -s globstar
+          gh release create 1 dependencies_by_charm.json ~/charmcraftcache-hub-build/pip/wheels/**/*.whl
+    permissions:
+      contents: write  # Needed to create release
