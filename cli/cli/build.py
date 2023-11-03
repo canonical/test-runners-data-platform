@@ -27,7 +27,7 @@ class Charm:
         else:
             commands = [
                 "git init",
-                "git sparse-checkout set --sparse-index .",
+                f"git sparse-checkout set --sparse-index {self.relative_path_to_charmcraft_yaml}",
                 f"git remote add --fetch origin https://github.com/{self.github_repository}.git",
                 f"git fetch origin {self.ref}",
                 "git checkout FETCH_HEAD",
