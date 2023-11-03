@@ -126,6 +126,10 @@ def main():
         json.dump(serializable_dependencies, file, indent=2)
     # Rename .whl files to include relative path from `~/charmcraftcache-hub-build/pip/wheels/`
     for wheel in (pip_cache / "pip/wheels/").glob("**/*.whl"):
+        # Example:
+        # `~/charmcraftcache-hub-build/pip/wheels/a6/bb/99/9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6/setuptools-68.2.2-py3-none-any.whl`
+        # is moved to
+        # `~/charmcraftcache-hub-build/pip/wheels/setuptools-68.2.2-py3-none-any.whl.a6_bb_99_9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6.charmcraftcachehub`
         wheel.rename(
             f'{wheel.name}.{str(wheel.parent).replace("/", "_")}.charmcraftcachehub'
         )
