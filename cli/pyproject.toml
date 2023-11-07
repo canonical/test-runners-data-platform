@@ -11,7 +11,6 @@ build = "cli.build:main"
 [tool.poetry.dependencies]
 python = "^3.10"
 
-
 [tool.poetry.group.format.dependencies]
 black = "^23.10.1"
 isort = "^5.12.0"
