@@ -70,21 +70,26 @@ def main():
     dependencies_by_charm: dict[Charm, set[Dependency]] = {}
     for charm in charms:
         charm.checkout_repository()
-        assert (charm.directory / "poetry.lock").exists()
-        subprocess.run(
-            [
-                "poetry",
-                "export",
-                # Ignore other dependency groups (e.g. unit test, lint, etc.)
-                "--only",
-                "main",
-                "--output",
-                "requirements.txt",
-            ],
-            cwd=charm.directory,
-            check=True,
-        )
-
+        # Check for charmcraft pack wrapper (tox `pack-wrapper` environment)
+        try:
+            tox_environments = subprocess.run(
+                ["tox", "list", "--no-desc"],
+                capture_output=True,
+                cwd=charm.directory,
+                check=True,
+                encoding="utf-8",
+            ).stdout.split("\n")
+        except FileNotFoundError:
+            # `tox` not installed
+            tox_environments = []
+        if "pack-wrapper" in tox_environments:
+            subprocess.run(
+                ["tox", "run", "-e", "pack-wrapper"], cwd=charm.directory, check=True
+            )
+            requirements = "requirements-last-build.txt"
+        else:
+            requirements = "requirements.txt"
+        assert (charm.directory / requirements).exists()
         env = os.environ
         env["XDG_CACHE_HOME"] = str(pip_cache)
         subprocess.run(
@@ -92,7 +97,7 @@ def main():
                 "pip",
                 "install",
                 "-r",
-                "requirements.txt",
+                requirements,
                 # Build wheels from source
                 "--no-binary",
                 ":all:",
