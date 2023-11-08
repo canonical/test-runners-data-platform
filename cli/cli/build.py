@@ -67,7 +67,6 @@ def main():
     args = parser.parse_args()
     with open(args.charms_file, "r") as file:
         charms = [Charm(**charm) for charm in json.load(file)]
-    dependencies_by_charm: dict[Charm, set[Dependency]] = {}
     for charm in charms:
         charm.checkout_repository()
         # Check for charmcraft pack wrapper (tox `pack-wrapper` environment)
@@ -102,39 +101,15 @@ def main():
                 "--no-binary",
                 ":all:",
                 # Cache will still be hit if exact version of wheel available
-                # `--ignore-installed` needed:
-                # - to ignore non-exact versions
-                # - to include all dependencies in report
+                # `--ignore-installed` needed to ignore non-exact versions
                 "--ignore-installed",
-                "--report",
-                "report.json",
             ],
             cwd=charm.directory,
             check=True,
             env=env,
         )
-        with open(charm.directory / "report.json", "r") as file:
-            report = json.load(file)
-        dependencies_by_charm[charm] = {
-            Dependency(
-                name=dependency["metadata"]["name"],
-                version=dependency["metadata"]["version"],
-            )
-            for dependency in report["install"]
-        }
     release_artifacts = pathlib.Path("~/charmcraftcache-hub-ci/release/").expanduser()
     release_artifacts.mkdir(parents=True)
-    serializable_dependencies = {}
-    for charm, dependencies in dependencies_by_charm.items():
-        serializable_dependencies[str(dataclasses.asdict(charm))] = [
-            dataclasses.asdict(dependency) for dependency in dependencies
-        ]
-    with open(release_artifacts / "manifest.json", "w") as file:
-        json.dump(
-            {"version": 1, "dependencies_by_charm": serializable_dependencies},
-            file,
-            indent=2,
-        )
     # Rename .whl files to include relative path from `~/charmcraftcache-hub-ci/build/pip/wheels/`
     for wheel in (pip_cache / "pip/wheels/").glob("**/*.whl"):
         # Example:
