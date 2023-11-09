@@ -120,6 +120,6 @@ def main():
         wheel.rename(
             pathlib.PurePath(
                 release_artifacts,
-                f'{wheel.name}.{str(wheel.parent.relative_to(pip_cache)).replace("/", "_")}.charmcraftcachehub',
+                f'{wheel.name}.charmcraftcachehub.{str(wheel.parent.relative_to(pip_cache)).replace("/", "_")}.charmcraftcachehub',
             )
         )
