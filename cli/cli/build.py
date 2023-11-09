@@ -80,6 +80,7 @@ def main():
             ).stdout.split("\n")
         except FileNotFoundError:
             # `tox` not installed
+            # TODO: add warning
             tox_environments = []
         if "pack-wrapper" in tox_environments:
             subprocess.run(
