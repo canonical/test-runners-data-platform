@@ -12,8 +12,6 @@ jobs:
     name: Build & release wheels
     runs-on: ubuntu-latest
     steps:
-      - name: Upgrade pip
-        run: pip install --upgrade pip
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up environment
