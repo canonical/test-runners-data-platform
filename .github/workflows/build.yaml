@@ -22,7 +22,6 @@ jobs:
         run: pipx install ./cli/
       - name: Build wheels from source
         run: build charms.json
-        uses: lhotari/action-upterm@v1
       - name: Create GitHub release
         run: gh release create "build-$(date +%s)" ~/charmcraftcache-hub-ci/release/*
         env:
