@@ -16,14 +16,14 @@ jobs:
         run: pip install --upgrade pip
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install poetry
-        run: pipx install poetry
+      - name: Set up environment
+        run: |
+          pipx install poetry
+          pipx install tox
       - name: Install CLI
         run: pipx install ./cli/
       - name: Build wheels from source
         run: build charms.json
-      - name: Setup upterm session
-        if: always()
         uses: lhotari/action-upterm@v1
       - name: Create GitHub release
         run: gh release create "build-$(date +%s)" ~/charmcraftcache-hub-ci/release/*
