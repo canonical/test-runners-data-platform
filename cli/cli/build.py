@@ -75,7 +75,7 @@ def main():
             capture_output=True,
             cwd=charm.directory,
             check=True,
-            encoding="utf-8"
+            encoding="utf-8",
         ).stdout.split("\n")
         if "pack-wrapper" in tox_environments:
             subprocess.run(
