@@ -111,12 +111,12 @@ def main():
         )
     release_artifacts = pathlib.Path("~/charmcraftcache-hub-ci/release/").expanduser()
     release_artifacts.mkdir(parents=True)
-    # Rename .whl files to include relative path from `~/charmcraftcache-hub-ci/build/pip/wheels/`
+    # Rename .whl files to include relative path from `~/charmcraftcache-hub-ci/build/`
     for wheel in (pip_cache / "pip/wheels/").glob("**/*.whl"):
         # Example:
         # `~/charmcraftcache-hub-ci/build/pip/wheels/a6/bb/99/9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6/setuptools-68.2.2-py3-none-any.whl`
         # is moved to
-        # `~/charmcraftcache-hub-ci/release/setuptools-68.2.2-py3-none-any.whl.a6_bb_99_9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6.charmcraftcachehub`
+        # `~/charmcraftcache-hub-ci/release/setuptools-68.2.2-py3-none-any.whl.charmcraftcachehub.pip_wheels_a6_bb_99_9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6.charmcraftcachehub`
         parent = str(wheel.parent.relative_to(pip_cache))
         assert "_" not in parent
         parent = parent.replace("/", "_")
