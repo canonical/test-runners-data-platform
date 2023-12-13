@@ -70,18 +70,13 @@ def main():
     for charm in charms:
         charm.checkout_repository()
         # Check for charmcraft pack wrapper (tox `pack-wrapper` environment)
-        try:
-            tox_environments = subprocess.run(
-                ["tox", "list", "--no-desc"],
-                capture_output=True,
-                cwd=charm.directory,
-                check=True,
-                encoding="utf-8",
-            ).stdout.split("\n")
-        except FileNotFoundError:
-            # `tox` not installed
-            # TODO: add warning
-            tox_environments = []
+        tox_environments = subprocess.run(
+            ["tox", "list", "--no-desc"],
+            capture_output=True,
+            cwd=charm.directory,
+            check=True,
+            encoding="utf-8"
+        ).stdout.split("\n")
         if "pack-wrapper" in tox_environments:
             subprocess.run(
                 ["tox", "run", "-e", "pack-wrapper"], cwd=charm.directory, check=True
