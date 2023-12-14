@@ -53,12 +53,6 @@ class Charm:
         return self._repository_directory / self.relative_path_to_charmcraft_yaml
 
 
-@dataclasses.dataclass(frozen=True, kw_only=True)
-class Dependency:
-    name: str
-    version: str
-
-
 def main():
     pip_cache = pathlib.Path("~/charmcraftcache-hub-ci/build/").expanduser()
     pip_cache.mkdir(parents=True)
