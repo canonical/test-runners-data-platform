@@ -64,10 +64,11 @@ main
     except IssueParsingError as exception:
         output = f"success={json.dumps(False)}\nerror={exception.message}"
     else:
-        with open("charms.json", "r+") as file:
+        with open("charms.json", "r") as file:
             data = json.load(file)
-            data.append(dataclasses.asdict(charm_branch))
-            json.dump(data, file)
+        data.append(dataclasses.asdict(charm_branch))
+        with open("charms.json", "w") as file:
+            json.dump(data, file, indent=2)
         output = f"success={json.dumps(True)}\ntitle=Add {charm_branch.github_repository}@{charm_branch.ref} at path {charm_branch.relative_path_to_charmcraft_yaml}"
     print(output)
     with open(os.environ["GITHUB_OUTPUT"], "a") as file:
