@@ -20,6 +20,8 @@ jobs:
       - name: Add charm to charms.json
         id: add-charm
         run: add-charm '${{ github.event.issue.body }}'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create pull request
         if: ${{ fromJSON(steps.add-charm.outputs.success) }}
         run: |
