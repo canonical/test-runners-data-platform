@@ -47,4 +47,5 @@ jobs:
     permissions:
       contents: write  # Needed to push branch
       pull-requests: write  # Needed to create & merge pull request
+      actions: write  # Needed to trigger build.yaml workflow
       issues: write  # Needed to create GitHub issue comment
