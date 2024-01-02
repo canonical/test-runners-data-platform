@@ -43,5 +43,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       contents: write  # Needed to push branch
-      pull-requests: write  # Needed to create pull request
+      pull-requests: write  # Needed to create & merge pull request
       issues: write  # Needed to create GitHub issue comment
