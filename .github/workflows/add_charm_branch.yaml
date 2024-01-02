@@ -34,6 +34,9 @@ jobs:
           # Uses GH_TOKEN environment variable
           pr_url=$(gh pr create --head "$branch" --title '${{ steps.add-charm.outputs.title }}' --body 'Closes #${{ github.event.issue.number }}' --label add-charm)
           gh pr merge "$pr_url" --squash
+          # Build workflow will not be automatically triggered after PR is merged
+          # (Events caused by Github Actions will not trigger other GitHub Actions: https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#triggering-further-workflow-runs)
+          gh workflow run build.yaml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Comment error on GitHub issue
