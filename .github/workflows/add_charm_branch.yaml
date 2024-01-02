@@ -32,7 +32,7 @@ jobs:
           # Uses token set in checkout step
           git push origin "$branch"
           # Uses GH_TOKEN environment variable
-          pr_url=$(gh pr create --head "$branch" --title '${{ steps.add-charm.outputs.title }}' --body 'Closes #${{ github.event.issue.number }}')
+          pr_url=$(gh pr create --head "$branch" --title '${{ steps.add-charm.outputs.title }}' --body 'Closes #${{ github.event.issue.number }}' --label add-charm)
           gh pr merge "$pr_url" --squash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
