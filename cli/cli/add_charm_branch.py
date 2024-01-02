@@ -2,6 +2,7 @@ import argparse
 import dataclasses
 import json
 import os
+import pathlib
 import re
 import subprocess
 
@@ -69,6 +70,9 @@ main
             )
         except subprocess.CalledProcessError:
             raise IssueParsingError("Invalid git ref. @carlcsaposs-canonical")
+        path = pathlib.Path(charm_branch.relative_path_to_charmcraft_yaml)
+        if not path.resolve().is_relative_to(pathlib.Path(".").resolve()):
+            raise IssueParsingError("Invalid path. @carlcsaposs-canonical")
     except IssueParsingError as exception:
         output = f"success={json.dumps(False)}\nerror={exception.message}"
     else:
