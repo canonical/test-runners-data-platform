@@ -48,7 +48,9 @@ class Charm(charm.Charm):
 
     @property
     def directory(self) -> pathlib.Path:
-        return self._repository_directory / self.relative_path_to_charmcraft_yaml
+        path = self._repository_directory / self.relative_path_to_charmcraft_yaml
+        assert path.is_relative_to(self._repository_directory)
+        return path
 
 
 def main():
