@@ -44,7 +44,22 @@ class Charm(charm.Charm):
                 ["git", "checkout", "FETCH_HEAD"],
             ]
         for command in commands:
-            subprocess.run(command, cwd=self._repository_directory, check=True)
+            if command[:-1] == ["git", "remote", "add", "--fetch", "origin"]:
+                try:
+                    subprocess.run(
+                        command,
+                        cwd=self._repository_directory,
+                        check=True,
+                        capture_output=True,
+                        encoding="utf-8",
+                    )
+                except subprocess.CalledProcessError as exception:
+                    if "ERROR: Repository not found." in exception.stderr:
+                        print(f"{self.github_repository=} not found")
+                    else:
+                        raise
+            else:
+                subprocess.run(command, cwd=self._repository_directory, check=True)
 
     @property
     def directory(self) -> pathlib.Path:
