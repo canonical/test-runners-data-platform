@@ -1,0 +1,33 @@
+name: Add charm branch
+description: "Build your charm's Python dependencies for charmcraftcache"
+title: Add charm branch
+labels: ["add-charm"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Adding your charm branch enables charmcraftcache-hub to build wheels for your Python dependencies—so that you can have faster builds with charmcraftcache
+  - type: input
+    id: repo
+    attributes:
+      label: GitHub repository
+      description: "Format: organization/name"
+      placeholder: canonical/mysql-router-k8s-operator
+    validations:
+      required: true
+  - type: input
+    id: ref
+    attributes:
+      label: Git ref (branch, tag, commit sha, etc.)
+      description: (You can add multiple refs—one per issue)
+      value: main
+    validations:
+      required: true
+  - type: input
+    id: charm-directory
+    attributes:
+      label: Relative path to charmcraft.yaml
+      description: Path from repository root directory to charm directory
+      value: .
+    validations:
+      required: true

@@ -7,6 +7,7 @@ readme = "README.md"
 
 [tool.poetry.scripts]
 build = "cli.build:main"
+add-charm = "cli.add_charm_branch:main"
 
 [tool.poetry.dependencies]
 python = "^3.10"

@@ -1,0 +1,43 @@
+name: Add charm branch
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-charm:
+    name: Add charm branch to charms.json
+    if: ${{ contains(github.event.issue.labels.*.name, 'add-charm') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upgrade pip
+        run: pip install --upgrade pip
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install CLI
+        run: pipx install ./cli/
+      - name: Add charm to charms.json
+        id: add-charm
+        run: add-charm '${{ github.event.issue.body }}'
+      - name: Create pull request
+        if: ${{ fromJSON(steps.add-charm.outputs.success) }}
+        run: |
+          branch="add-charm-$(date +%s)"
+          git checkout -b "$branch"
+          git add charms.json
+          git config user.name "GitHub Actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m '${{ steps.add-charm.outputs.title }}'
+          # Uses token set in checkout step
+          git push origin "$branch"
+          # Uses GH_TOKEN environment variable
+          pr_url=$(gh pr create --head "$branch" --title '${{ steps.add-charm.outputs.title }}' --body 'Closes #${{ github.event.issue.number }}')
+          gh pr merge "$pr_url" --squash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Comment error on GitHub issue
+        if: ${{ !fromJSON(steps.add-charm.outputs.success) }}
+        run: gh issue comment '${{ github.event.issue.number }}' --body '${{ steps.add-charm.outputs.error }}' --repo '${{ github.repository }}'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

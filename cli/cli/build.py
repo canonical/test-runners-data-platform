@@ -5,13 +5,11 @@ import os
 import pathlib
 import subprocess
 
+import charm
+
 
 @dataclasses.dataclass(frozen=True, kw_only=True)
-class Charm:
-    github_repository: str
-    ref: str
-    relative_path_to_charmcraft_yaml: str
-
+class Charm(charm.Charm):
     @property
     def _repository_directory(self) -> pathlib.Path:
         return pathlib.Path("repos", self.github_repository)
