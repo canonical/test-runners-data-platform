@@ -3,6 +3,7 @@ import dataclasses
 import json
 import os
 import re
+import subprocess
 
 from . import charm
 
@@ -61,6 +62,13 @@ main
                 f'these GitHub organizations: {",".join(allowed_github_orgs)}. '
                 "More info: https://github.com/carlcsaposs-canonical/charmcraftcache/issues/2"
             )
+        try:
+            subprocess.run(
+                ["git", "check-ref-format", "--allow-onelevel", charm_branch.ref],
+                check=True,
+            )
+        except subprocess.CalledProcessError:
+            raise IssueParsingError("Invalid git ref. @carlcsaposs-canonical")
     except IssueParsingError as exception:
         output = f"success={json.dumps(False)}\nerror={exception.message}"
     else:
