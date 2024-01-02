@@ -4,7 +4,7 @@ import json
 import os
 import re
 
-import charm
+from . import charm
 
 
 class IssueParsingError(ValueError):

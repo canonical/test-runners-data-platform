@@ -5,7 +5,7 @@ import os
 import pathlib
 import subprocess
 
-import charm
+from . import charm
 
 
 @dataclasses.dataclass(frozen=True, kw_only=True)
