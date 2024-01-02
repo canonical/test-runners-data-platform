@@ -31,6 +31,8 @@ main
 ### Relative path to charmcraft.yaml
 
 ."""
+    print(args.issue_body)
+    print("foo")
     match = re.fullmatch(
         r"""### GitHub repository
 
