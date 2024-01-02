@@ -31,12 +31,10 @@ main
 ### Relative path to charmcraft.yaml
 
 ."""
-    print(args.issue_body)
-    print("foo")
     match = re.fullmatch(
         r"""### GitHub repository
 
-(?P<organization>[a-zA-Z0-9.-_]+)/(?P<repo_name>[a-zA-Z0-9.-_]+)
+(?P<organization>[a-zA-Z0-9.\-_]+)/(?P<repo_name>[a-zA-Z0-9.\-_]+)
 
 ### Git ref \(branch, tag, commit sha, etc\.\)
 
