@@ -12,6 +12,7 @@ add-charm = "cli.add_charm_branch:main"
 [tool.poetry.dependencies]
 python = "^3.10"
 pip = "^23.3.1"
+pyyaml = "^6.0.1"
 
 [tool.poetry.group.format.dependencies]
 black = "^23.10.1"
