@@ -21,7 +21,7 @@
   },
   {
     "github_repository": "canonical/pgbouncer-k8s-operator",
-    "ref": "release-libs",
+    "ref": "main",
     "relative_path_to_charmcraft_yaml": "."
   }
 ]
