@@ -113,9 +113,8 @@ def main():
         )
         for charm_ in charms:
             charm_.checkout_repository()
-            if not is_base_in_charmcraft_yaml(
-                base, charm_.directory / "charmcraft.yaml"
-            ):
+            charmcraft_yaml = charm_.directory / "charmcraft.yaml"
+            if not is_base_in_charmcraft_yaml(base, charmcraft_yaml):
                 continue
             # Check for charmcraft pack wrapper (tox `build-wrapper` environment)
             tox_environments = subprocess.run(
@@ -135,28 +134,38 @@ def main():
             else:
                 requirements = "requirements.txt"
             assert (charm_.directory / requirements).exists()
+            command = [
+                pyenv,
+                "exec",
+                "pip",
+                "install",
+                "-r",
+                requirements,
+                # Build wheels from source
+                "--no-binary",
+                ":all:",
+                # Cache will still be hit if exact version of wheel available
+                # `--ignore-installed` needed to ignore non-exact versions
+                "--ignore-installed",
+            ]
+            binary_packages: list[str] | None = (
+                yaml.safe_load(charmcraft_yaml.read_text())
+                .get("parts", {})
+                .get("charm", {})
+                .get("charm-binary-python-packages")
+            )
+            if binary_packages:
+                # Some packages cannot be built from source (e.g. psycopg-binary) and will cause
+                # `pip install` with only `--no-binary :all:` to fail.
+                # For packages in charmcraft.yaml `charm-binary-python-packages`, download binary
+                # wheels instead of building from source.
+                # These packages will be saved to pip's HTTP cache (not its wheel cache), so they
+                # will be discarded & will not be included in the release.
+                command.extend(("--only-binary", ",".join(binary_packages)))
             env = os.environ
             env["PYENV_VERSION"] = base.python_version
             env["XDG_CACHE_HOME"] = str(pip_cache)
-            subprocess.run(
-                [
-                    pyenv,
-                    "exec",
-                    "pip",
-                    "install",
-                    "-r",
-                    requirements,
-                    # Build wheels from source
-                    "--no-binary",
-                    ":all:",
-                    # Cache will still be hit if exact version of wheel available
-                    # `--ignore-installed` needed to ignore non-exact versions
-                    "--ignore-installed",
-                ],
-                cwd=charm_.directory,
-                check=True,
-                env=env,
-            )
+            subprocess.run(command, cwd=charm_.directory, check=True, env=env)
         # Rename .whl files to include relative path from `~/charmcraftcache-hub-ci/build/` and
         # Ubuntu series
         for wheel in (pip_cache / "pip/wheels/").glob("**/*.whl"):
