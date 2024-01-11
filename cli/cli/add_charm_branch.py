@@ -83,14 +83,19 @@ main
         path = pathlib.Path(charm_branch.relative_path_to_charmcraft_yaml)
         if not path.resolve().is_relative_to(pathlib.Path(".").resolve()):
             raise IssueParsingError("Invalid path. @carlcsaposs-canonical")
+        with open("charms.json", "r") as file:
+            charms = json.load(file)
+        charm_ = dataclasses.asdict(charm_branch)
+        if charm_ in charms:
+            raise IssueParsingError(
+                "Git ref already exists in charms.json. @carlcsaposs-canonical"
+            )
     except IssueParsingError as exception:
         output = f"success={json.dumps(False)}\nerror={exception.message}"
     else:
-        with open("charms.json", "r") as file:
-            data = json.load(file)
-        data.append(dataclasses.asdict(charm_branch))
+        charms.append(charm_)
         with open("charms.json", "w") as file:
-            json.dump(data, file, indent=2)
+            json.dump(charms, file, indent=2)
         output = f"success={json.dumps(True)}\ntitle=Add {charm_branch.github_repository}@{charm_branch.ref} at path {charm_branch.relative_path_to_charmcraft_yaml}"
     print(output)
     with open(os.environ["GITHUB_OUTPUT"], "a") as file:
