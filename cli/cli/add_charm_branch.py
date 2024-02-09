@@ -62,7 +62,7 @@ main
             raise IssueParsingError(
                 "To protect against arbitrary code execution, charmcraftcache-hub is only available for "
                 f'these GitHub organizations: {", ".join(allowed_github_orgs)}. '
-                "More info: https://github.com/carlcsaposs-canonical/charmcraftcache/issues/2"
+                "More info: https://github.com/canonical/charmcraftcache/issues/2"
             )
         # Check that repository exists
         try:
