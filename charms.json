@@ -51,7 +51,7 @@
   },
   {
     "github_repository": "canonical/mongodb-operator",
-    "ref": "update-ci-int-tests",
+    "ref": "main",
     "relative_path_to_charmcraft_yaml": "."
   }
 ]
