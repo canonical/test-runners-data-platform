@@ -3,6 +3,7 @@ import dataclasses
 import json
 import os
 import pathlib
+import platform
 import subprocess
 
 import yaml
@@ -81,14 +82,31 @@ BASES = [
     UbuntuBase("22.04", "jammy", "3.10"),
 ]
 
+CHARMCRAFT_ARCHITECTURES = {"x86_64": "amd64", "aarch64": "arm64"}
 
-def is_base_in_charmcraft_yaml(base: UbuntuBase, charmcraft_yaml: pathlib.Path) -> bool:
+
+def is_base_in_charmcraft_yaml(
+    *, base: UbuntuBase, charmcraft_yaml: pathlib.Path, architecture: str
+) -> bool:
     """Check if base in charmcraft.yaml"""
     bases = yaml.safe_load(charmcraft_yaml.read_text())["bases"]
-    # Handle multiple bases formats
-    # See https://discourse.charmhub.io/t/charmcraft-bases-provider-support/4713
-    versions = [base_.get("build-on", [base_])[0]["channel"] for base_ in bases]
-    return base.version in versions
+    for base_ in bases:
+        # Handle multiple bases formats
+        # See https://discourse.charmhub.io/t/charmcraft-bases-provider-support/4713
+        build_on = base_.get("build-on")
+        if build_on:
+            assert isinstance(build_on, list) and len(build_on) == 1
+            base_ = build_on[0]
+        build_on_architectures = base_.get("architectures", ["amd64"])
+        assert (
+            len(build_on_architectures) == 1
+        ), f"Multiple architectures ({build_on_architectures}) in one (charmcraft.yaml) base not supported. Use one base per architecture"
+        if (
+            base_["channel"] == base.version
+            and build_on_architectures[0] == CHARMCRAFT_ARCHITECTURES[architecture]
+        ):
+            return True
+    return False
 
 
 def main():
@@ -97,6 +115,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("charms_file")
     args = parser.parse_args()
+    architecture = platform.machine()
     with open(args.charms_file, "r") as file:
         charms = [Charm(**charm) for charm in json.load(file)]
     pyenv = str(pathlib.Path("~/.pyenv/bin/pyenv").expanduser())
@@ -114,7 +133,9 @@ def main():
         for charm_ in charms:
             charm_.checkout_repository()
             charmcraft_yaml = charm_.directory / "charmcraft.yaml"
-            if not is_base_in_charmcraft_yaml(base, charmcraft_yaml):
+            if not is_base_in_charmcraft_yaml(
+                base=base, charmcraft_yaml=charmcraft_yaml, architecture=architecture
+            ):
                 continue
             # Install `build-packages`
             charm_part: dict = (
@@ -180,13 +201,13 @@ def main():
             # Example:
             # `~/charmcraftcache-hub-ci/build/pip/wheels/a6/bb/99/9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6/setuptools-68.2.2-py3-none-any.whl`
             # is moved to
-            # `~/charmcraftcache-hub-ci/release/setuptools-68.2.2-py3-none-any.whl.charmcraftcachehub.jammy_pip_wheels_a6_bb_99_9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6.charmcraftcachehub`
+            # `~/charmcraftcache-hub-ci/release/setuptools-68.2.2-py3-none-any.whl.ccchub1.jammy.ccchub2.x86_64.ccchub3.pip_wheels_a6_bb_99_9eae10e99b02cc1daa8f370d631ae22d9a1378c33d04b598b6.charmcraftcachehub`
             parent = str(wheel.parent.relative_to(pip_cache))
             assert "_" not in parent
             parent = parent.replace("/", "_")
             wheel.rename(
                 pathlib.PurePath(
                     release_artifacts,
-                    f"{wheel.name}.charmcraftcachehub.{base.series}_{parent}.charmcraftcachehub",
+                    f"{wheel.name}.ccchub1.{base.series}.ccchub2.{architecture}.ccchub3.{parent}.charmcraftcachehub",
                 )
             )
