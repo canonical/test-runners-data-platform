@@ -116,6 +116,17 @@ def main():
             charmcraft_yaml = charm_.directory / "charmcraft.yaml"
             if not is_base_in_charmcraft_yaml(base, charmcraft_yaml):
                 continue
+            # Install `build-packages`
+            charm_part: dict = (
+                yaml.safe_load(charmcraft_yaml.read_text())
+                .get("parts", {})
+                .get("charm", {})
+            )
+            build_packages: list[str] | None = charm_part.get("build-packages")
+            if build_packages:
+                subprocess.run(
+                    ["sudo", "apt-get", "install", *build_packages, "-y"], check=True
+                )
             # Check for charmcraft pack wrapper (tox `build-wrapper` environment)
             tox_environments = subprocess.run(
                 ["tox", "list", "--no-desc"],
@@ -148,11 +159,8 @@ def main():
                 # `--ignore-installed` needed to ignore non-exact versions
                 "--ignore-installed",
             ]
-            binary_packages: list[str] | None = (
-                yaml.safe_load(charmcraft_yaml.read_text())
-                .get("parts", {})
-                .get("charm", {})
-                .get("charm-binary-python-packages")
+            binary_packages: list[str] | None = charm_part.get(
+                "charm-binary-python-packages"
             )
             if binary_packages:
                 # Some packages cannot be built from source (e.g. psycopg-binary) and will cause
