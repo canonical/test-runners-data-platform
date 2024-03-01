@@ -51,7 +51,7 @@
   },
   {
     "github_repository": "canonical/mongodb-operator",
-    "ref": "main",
+    "ref": "6/edge",
     "relative_path_to_charmcraft_yaml": "."
   }
 ]
