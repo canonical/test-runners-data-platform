@@ -131,6 +131,7 @@ def main():
             env=env,
         )
         for charm_ in charms:
+            print(f"[ccc-hub] Repository: {charm_.github_repository} {base=}")
             charm_.checkout_repository()
             charmcraft_yaml = charm_.directory / "charmcraft.yaml"
             if not is_base_in_charmcraft_yaml(
@@ -145,6 +146,7 @@ def main():
             )
             build_packages: list[str] | None = charm_part.get("build-packages")
             if build_packages:
+                print("[ccc-hub] Installing apt build-packages")
                 subprocess.run(
                     ["sudo", "apt-get", "install", *build_packages, "-y"], check=True
                 )
@@ -157,6 +159,7 @@ def main():
                 encoding="utf-8",
             ).stdout.split("\n")
             if "build-wrapper" in tox_environments:
+                print("[ccc-hub] Tox build wrapper detected")
                 subprocess.run(
                     ["tox", "run", "-e", "build-wrapper"],
                     cwd=charm_.directory,
@@ -194,7 +197,9 @@ def main():
             env = os.environ
             env["PYENV_VERSION"] = base.python_version
             env["XDG_CACHE_HOME"] = str(pip_cache)
+            print(f"[ccc-hub] Building wheels for {charm_.github_repository=} {base=}")
             subprocess.run(command, cwd=charm_.directory, check=True, env=env)
+            print(f"[ccc-hub] Built wheels for {charm_.github_repository=} {base=}")
         # Rename .whl files to include relative path from `~/charmcraftcache-hub-ci/build/` and
         # Ubuntu series
         for wheel in (pip_cache / "pip/wheels/").glob("**/*.whl"):
