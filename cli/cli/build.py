@@ -131,15 +131,15 @@ def main():
             env=env,
         )
         for charm_ in charms:
-            print(
-                f"[ccc-hub] Repository: {charm_.github_repository} {base=}", flush=True
-            )
             charm_.checkout_repository()
             charmcraft_yaml = charm_.directory / "charmcraft.yaml"
             if not is_base_in_charmcraft_yaml(
                 base=base, charmcraft_yaml=charmcraft_yaml, architecture=architecture
             ):
                 continue
+            print(
+                f"[ccc-hub] Repository: {charm_.github_repository} {base=}", flush=True
+            )
             # Install `build-packages`
             charm_part: dict = (
                 yaml.safe_load(charmcraft_yaml.read_text())
