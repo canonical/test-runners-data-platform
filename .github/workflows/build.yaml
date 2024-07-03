@@ -76,6 +76,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install CLI
+        run: pipx install ./cli/
       - name: Create directory
         run: mkdir ~/release/
       - name: Download wheels
