@@ -88,7 +88,7 @@ def main():
             "target_commitish": os.environ["GITHUB_SHA"],
             "name": release_name,
             "draft": True,
-            "make_latest": False,
+            "make_latest": "false",
         },
     )
     response.raise_for_status()
@@ -110,7 +110,7 @@ def main():
         headers=headers,
         json={
             "draft": False,
-            "make_latest": True,
+            "make_latest": "true",
         },
     )
     response.raise_for_status()
