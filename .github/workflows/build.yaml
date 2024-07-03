@@ -85,9 +85,7 @@ jobs:
           pattern: wheels-*
           merge-multiple: true
       - name: Create GitHub release
-        run: |
-          name="build-$(date +%s)-v3"
-          gh release create "$name" --title "$name" ~/release/*
+        run: create-release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
