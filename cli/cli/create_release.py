@@ -1,6 +1,7 @@
 import datetime
 import os
 import pathlib
+import subprocess
 import time
 
 import requests
@@ -63,6 +64,11 @@ class GitHubRateLimitRetry(urllib3.util.Retry):
 
 
 def main():
+    release_name = f"build-{int(time.time())}-v3"
+    # Create git tag
+    subprocess.run(["git", "tag", release_name], check=True)
+    subprocess.run(["git", "push", "origin", release_name], check=True)
+
     session = requests.Session()
     session.mount(
         "https://", requests.adapters.HTTPAdapter(max_retries=GitHubRateLimitRetry())
@@ -74,7 +80,6 @@ def main():
     }
     # Create draft release
     # (Wait until all release files uploaded before marking as latest, non-draft release)
-    release_name = f"build-{int(time.time())}-v3"
     response = session.post(
         f'https://api.github.com/repos/{os.environ["GITHUB_REPOSITORY"]}/releases',
         headers=headers,
