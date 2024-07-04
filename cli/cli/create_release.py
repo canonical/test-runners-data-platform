@@ -53,7 +53,7 @@ class GitHubRateLimitRetry(urllib3.util.Retry):
 
     def sleep_for_retry(self, response: urllib3.BaseHTTPResponse) -> bool:
         # Sleep until x-ratelimit-reset
-        if int(response.headers["x-ratelimit-remaining"]) == 0 and (
+        if int(response.headers.get("x-ratelimit-remaining", -1)) == 0 and (
             reset := response.headers.get("x-ratelimit-reset")
         ):
             retry_time = datetime.datetime.fromtimestamp(
