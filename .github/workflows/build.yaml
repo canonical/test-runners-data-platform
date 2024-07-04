@@ -16,25 +16,17 @@ jobs:
           - name: X64
             runs-on: ubuntu-latest
           - name: ARM64
-            runs-on: Ubuntu_ARM64_4C_16G_01
+            runs-on: [self-hosted, data-platform, ubuntu, ARM64, 4cpu16ram]
     name: Build wheels | ${{ matrix.runner.name }}
     runs-on: ${{ matrix.runner.runs-on }}
     timeout-minutes: 180
     steps:
-      - name: (GitHub-hosted ARM runner) Update git
+      - name: (Data Platform hosted) Update git
         if: ${{ matrix.runner.name == 'ARM64' }}
         run: |
           sudo add-apt-repository ppa:git-core/ppa
           sudo apt-get update
           sudo apt-get install git -y
-      - name: (GitHub-hosted ARM runner) Install pipx
-        if: ${{ matrix.runner.name == 'ARM64' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install python3-pip python3-venv -y
-          python3 -m pip install pipx
-          python3 -m pipx ensurepath
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: Install pyenv
         run: |
           sudo apt-get update
