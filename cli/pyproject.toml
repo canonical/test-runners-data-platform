@@ -15,6 +15,7 @@ python = "^3.10"
 pip = "^23.3.1"
 pyyaml = "^6.0.1"
 requests = "^2.32.3"
+uritemplate = "^4.1.1"
 
 [tool.poetry.group.format.dependencies]
 black = "^23.10.1"

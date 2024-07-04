@@ -6,6 +6,7 @@ import time
 
 import requests
 import requests.adapters
+import uritemplate
 import urllib3
 import urllib3.util
 
@@ -110,15 +111,14 @@ def main():
     response.raise_for_status()
     print("[ccc-hub] Created draft release", flush=True)
     data = response.json()
-    upload_url = data["upload_url"]
+    upload_url_template = uritemplate.URITemplate(data["upload_url"])
     release_id = data["id"]
     # Upload release files
     for path in pathlib.Path("~/release").expanduser().glob("*"):
         with path.open("rb") as file:
             response = session.post(
-                upload_url,
+                upload_url_template.expand(name=path.name),
                 headers={**headers, "Content-Type": "application/octet-stream"},
-                params={"name": path.name},
                 data=file,
             )
         response.raise_for_status()
