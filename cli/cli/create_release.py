@@ -104,12 +104,13 @@ def main():
     # Upload release files
     for path in pathlib.Path("~/release").expanduser().glob("*"):
         with path.open("rb") as file:
-            session.post(
+            response = session.post(
                 upload_url,
                 headers=headers,
                 params={"name": path.name},
                 data=file,
             )
+        response.raise_for_status()
     # Mark release as latest
     response = session.patch(
         f'https://api.github.com/repos/{os.environ["GITHUB_REPOSITORY"]}/releases/{release_id}',
