@@ -17,21 +17,27 @@ class GitHubRateLimitRetry(urllib3.util.Retry):
     """
 
     def __init__(self, **kwargs):
-        super().__init__(
-            total=None,  # Infinite retry
-            # Only retry on status code
-            connect=0,
-            read=0,
-            redirect=0,
-            other=0,
-            allowed_methods=(
-                *urllib3.util.Retry.DEFAULT_ALLOWED_METHODS,
-                "POST",
-                "PATCH",
-            ),
-            status_forcelist=(403, 429),
-            **kwargs,
+        # Use setdefault since this class is re-initialized on each retry
+        # (using values from last retry)
+
+        # Infinite retry
+        assert kwargs.setdefault("total", None) is None
+        # Only retry on status code
+        assert kwargs.setdefault("connect", 0) == 0
+        assert kwargs.setdefault("read", 0) == 0
+        assert kwargs.setdefault("redirect", 0) == 0
+        assert kwargs.setdefault("status", None) is None
+        assert kwargs.setdefault("other", 0) == 0
+
+        allowed_methods = (
+            *urllib3.util.Retry.DEFAULT_ALLOWED_METHODS,
+            "POST",
+            "PATCH",
         )
+        assert kwargs.setdefault("allowed_methods", allowed_methods) == allowed_methods
+        assert kwargs.setdefault("status_forcelist", (403, 429)) == (403, 429)
+        assert kwargs.setdefault("respect_retry_after_header", True) is True
+        super().__init__(**kwargs)
 
     def get_retry_after(self, response: urllib3.BaseHTTPResponse) -> float | None:
         seconds = super().get_retry_after(response)
