@@ -42,7 +42,7 @@ class GitHubRateLimitRetry(urllib3.util.Retry):
     def get_retry_after(self, response: urllib3.BaseHTTPResponse) -> float | None:
         seconds = super().get_retry_after(response)
         if seconds:
-            print(f"Rate limit exceeded. Sleeping for {int(seconds)} seconds")
+            print(f"[ccc-hub] Rate limit exceeded. Sleeping for {int(seconds)} seconds")
         return seconds
 
     def sleep_for_retry(self, response: urllib3.BaseHTTPResponse) -> bool:
@@ -55,7 +55,7 @@ class GitHubRateLimitRetry(urllib3.util.Retry):
             )
             retry_delta = retry_time - datetime.datetime.now(tz=datetime.timezone.utc)
             seconds = max(retry_delta.total_seconds(), 0)
-            print(f"Rate limit exceeded. Sleeping for {int(seconds)} seconds")
+            print(f"[ccc-hub] Rate limit exceeded. Sleeping for {int(seconds)} seconds")
             time.sleep(seconds)
             return True
         # Sleep for/until retry-after
@@ -63,7 +63,7 @@ class GitHubRateLimitRetry(urllib3.util.Retry):
             return True
         # x-ratelimit-reset and retry-after headers missing
         print(
-            "Rate limit exceeded. Sleeping for 60 seconds (rate limit headers missing)"
+            "[ccc-hub] Rate limit exceeded. Sleeping for 60 seconds (rate limit headers missing)"
         )
         time.sleep(60)
         return True
@@ -74,6 +74,7 @@ def main():
     # Create git tag
     subprocess.run(["git", "tag", release_name], check=True)
     subprocess.run(["git", "push", "origin", release_name], check=True)
+    print(f"[ccc-hub] Created & pushed git tag {release_name}")
 
     session = requests.Session()
     session.mount(
@@ -98,6 +99,7 @@ def main():
         },
     )
     response.raise_for_status()
+    print("[ccc-hub] Created draft release")
     data = response.json()
     upload_url = data["upload_url"]
     release_id = data["id"]
@@ -111,6 +113,8 @@ def main():
                 data=file,
             )
         response.raise_for_status()
+        print(f"[ccc-hub] Uploaded {path.name}")
+    print("[ccc-hub] Uploaded all release files")
     # Mark release as latest
     response = session.patch(
         f'https://api.github.com/repos/{os.environ["GITHUB_REPOSITORY"]}/releases/{release_id}',
@@ -121,3 +125,4 @@ def main():
         },
     )
     response.raise_for_status()
+    print("[ccc-hub] Marked release as latest")
