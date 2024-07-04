@@ -23,11 +23,13 @@ class GitHubRateLimitRetry(urllib3.util.Retry):
         # Infinite retry
         assert kwargs.setdefault("total", None) is None
         # Only retry on status code
-        assert kwargs.setdefault("connect", 0) == 0
-        assert kwargs.setdefault("read", 0) == 0
-        assert kwargs.setdefault("redirect", 0) == 0
+        # `<=0` since count is decremented & this class is re-initialized with `-1` before retry is
+        # stopped
+        assert kwargs.setdefault("connect", 0) <= 0
+        assert kwargs.setdefault("read", 0) <= 0
+        assert kwargs.setdefault("redirect", 0) <= 0
         assert kwargs.setdefault("status", None) is None
-        assert kwargs.setdefault("other", 0) == 0
+        assert kwargs.setdefault("other", 0) <= 0
 
         allowed_methods = (
             *urllib3.util.Retry.DEFAULT_ALLOWED_METHODS,
