@@ -117,7 +117,7 @@ def main():
         with path.open("rb") as file:
             response = session.post(
                 upload_url,
-                headers=headers,
+                headers={**headers, "Content-Type": "application/octet-stream"},
                 params={"name": path.name},
                 data=file,
             )
