@@ -6,7 +6,7 @@
   },
   {
     "github_repository": "canonical/mysql-router-operator",
-    "ref": "wrapper",
+    "ref": "main",
     "relative_path_to_charmcraft_yaml": "."
   },
   {
