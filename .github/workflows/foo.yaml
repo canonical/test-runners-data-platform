@@ -1,0 +1,12 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  foo:
+    strategy:
+      matrix:
+        foo: [1,2,3,4]
+        bar: [1,2,3]
+    runs-on: [self-hosted, data-platform, ubuntu, ARM64, 4cpu16ram]
+    steps:
+      - run: echo 'Hello, world!'
