@@ -32,6 +32,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev -y
           curl https://pyenv.run | bash
+      - name: Install rust
+        # Need new version of Rust compiler to build rpds-py>=0.19.0
+        run: |
+          sudo snap install rustup
+          rustup default stable
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up environment
