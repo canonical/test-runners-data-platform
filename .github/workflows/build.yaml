@@ -35,7 +35,7 @@ jobs:
       - name: Install rust
         # Need new version of Rust compiler to build rpds-py>=0.19.0
         run: |
-          sudo snap install rustup
+          sudo snap install rustup --classic
           rustup default stable
       - name: Checkout
         uses: actions/checkout@v4
