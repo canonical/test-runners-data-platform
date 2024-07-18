@@ -16,5 +16,5 @@ jobs:
         - name: Run Vale tests
           uses: errata-ai/vale-action@reviewdog
           with:
-            files: .
+            files: all
             fail_on_error: true
