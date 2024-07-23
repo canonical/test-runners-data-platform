@@ -1,4 +1,4 @@
-name: charmed-postgresql
+name: test-dpw-charmed-postgresql
 base: ubuntu@22.04
 version: '14.12'
 summary: PostgreSQL in a rock.

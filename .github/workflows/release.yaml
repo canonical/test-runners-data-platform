@@ -9,7 +9,7 @@ concurrency:
 on:
   push:
     branches:
-      - 14-22.04
+      - testdpwrock
   workflow_dispatch:
 
 jobs:
@@ -21,11 +21,12 @@ jobs:
     name: Release rock
     needs:
       - build
-    uses: canonical/data-platform-workflows/.github/workflows/release_rock.yaml@v16.4.3
+    uses: canonical/data-platform-workflows/.github/workflows/release_rock.yaml@rock-tag
     with:
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
     permissions:
       packages: write  # Needed to publish to GitHub Container Registry
+      contents: write  # Needed to create GitHub release
 
   sbom:
     name: Generate Software Bill of Materials
