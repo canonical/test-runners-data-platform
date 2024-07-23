@@ -1,7 +1,7 @@
 # Copyright 2023 Canonical Ltd.
 # See LICENSE file for licensing details.
 
-name: postgresql-k8s
+name: test-foo-skjlafjdlskajf
 display-name: Charmed PostgreSQL K8s
 summary: Charmed PostgreSQL K8s operator
 description: |
