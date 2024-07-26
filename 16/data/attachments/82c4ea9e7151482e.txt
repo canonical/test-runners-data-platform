@@ -1,0 +1,5 @@
+[32mINFO    [0m integration.test_node_port:test_node_port.py:147 Assert TLS file exists
+[32mINFO    [0m integration.test_node_port:test_node_port.py:153 Asserting connections after relation
+[32mINFO    [0m mysql.connector:authentication.py:66 package: mysql.connector.plugins
+[32mINFO    [0m mysql.connector:authentication.py:67 plugin_name: caching_sha2_password
+[32mINFO    [0m mysql.connector:authentication.py:71 AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin

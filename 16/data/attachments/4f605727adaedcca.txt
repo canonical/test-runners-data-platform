@@ -1,0 +1,13 @@
+[32mINFO    [0m pytest_operator.plugin:plugin.py:734 Connecting to existing model microk8s-localhost:test on unspecified cloud
+[32mINFO    [0m integration.test_tls:test_tls.py:55 Deploy and relate all applications
+[32mINFO    [0m juju.model:model.py:1994 Deploying ch:amd64/jammy/mysql-k8s-164
+[32mINFO    [0m juju.model:model.py:1994 Deploying ch:amd64/jammy/tls-certificates-operator-22
+[32mINFO    [0m juju.model:model.py:1994 Deploying ch:amd64/jammy/mysql-test-app-46
+[32mINFO    [0m juju.model:model.py:1994 Deploying local:jammy/mysql-router-k8s-0
+[32mINFO    [0m integration.test_tls:test_tls.py:103 Waiting for applications to become active
+[32mINFO    [0m juju.model:model.py:2631 Waiting for model:
+  mysql-test-app/0 [allocating] waiting: installing agent
+[32mINFO    [0m juju.model:model.py:2631 Waiting for model:
+  mysql-test-app/0 [idle] waiting: 
+[32mINFO    [0m juju.model:model.py:2631 Waiting for model:
+  mysql-test-app/0 [idle] waiting:
