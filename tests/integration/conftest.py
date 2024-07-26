@@ -3,6 +3,7 @@
 
 import logging
 
+import allure
 import pytest
 from pytest_operator.plugin import OpsTest
 
@@ -29,3 +30,8 @@ async def continuous_writes(ops_test: OpsTest):
 
     logger.info("Clearing continuous writes")
     await juju_.run_action(application_unit, "clear-continuous-writes")
+
+
+@pytest.fixture(autouse=True)
+def allure_parameter():
+    allure.dynamic.parameter("juju", "3.1")
