@@ -1,5 +1,5 @@
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
   foo:
@@ -10,4 +10,3 @@ jobs:
     runs-on: [self-hosted, data-platform, ubuntu, ARM64, 4cpu16ram]
     steps:
       - run: echo 'Hello, world!'
-
