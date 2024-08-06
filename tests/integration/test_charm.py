@@ -40,7 +40,7 @@ async def test_database_relation(ops_test: OpsTest):
     # Build and deploy applications
     mysqlrouter_charm = await ops_test.build_charm(".")
     await ops_test.model.set_config(MODEL_CONFIG)
-
+    ops_test.juju()
     mysqlrouter_resources = {
         "mysql-router-image": METADATA["resources"]["mysql-router-image"]["upstream-source"]
     }

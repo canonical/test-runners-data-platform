@@ -1,6 +1,6 @@
 # Copyright 2023 Canonical Ltd.
 # See LICENSE file for licensing details.
-name: mysql-router-k8s
+name: test-foo-skjlafjdlskajf
 display-name: MySQL Router K8s
 summary: Charmed MySQL Router K8s operator
 description: |
