@@ -18,7 +18,7 @@ jobs:
     name: Release charm
     needs:
       - build
-    uses: canonical/data-platform-workflows/.github/workflows/release_charm.yaml@fix-release-notes
+    uses: canonical/data-platform-workflows/.github/workflows/release_charm.yaml@fix-release-notes-path
     with:
       channel: latest/edge
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
