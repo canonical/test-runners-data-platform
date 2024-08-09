@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pipx install git+https://github.com/canonical/jhack@optimize-tail
-      - run: jhack tail --file juju-debug-log.txt --replay --length=50000 --no-watch --printer raw
+      - run: jhack tail --file juju-debug-log.txt --printer raw
       - run: jhack tail --file juju-debug-log.txt --color 256 --replay --length=50000 --no-watch
       - shell: python
         run: |
@@ -21,7 +21,7 @@ jobs:
         run: |
           import subprocess
           subprocess.run(
-              "jhack tail --file juju-debug-log.txt --color 256 --replay --length=50000 --printer raw | tee foo.txt",
+              "jhack tail --file juju-debug-log.txt --printer raw | tee foo.txt",
               shell=True,
               check=True,
           )
