@@ -1,12 +1,11 @@
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
   foo:
-    strategy:
-      matrix:
-        foo: [1,2,3,4]
-        bar: [1,2,3]
-    runs-on: [self-hosted, data-platform, ubuntu, ARM64, 4cpu16ram]
+    runs-on: ubuntu-latest
     steps:
-      - run: echo 'Hello, world!'
+      - uses: actions/checkout@v4
+      - run: pipx install git+https://github.com/canonical/jhack@optimize-tail
+      - run: jhack tail --file juju-debug-log.txt --replay --length=50000 --no-watch --printer raw
+      - run: jhack tail --file juju-debug-log.txt --replay --length=50000 --no-watch
