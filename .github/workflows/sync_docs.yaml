@@ -11,8 +11,8 @@ jobs:
   sync-docs:
     name: Sync docs from Discourse
     uses: canonical/data-platform-workflows/.github/workflows/sync_docs.yaml@download-discourse-topics
-      with:
-        reviewers: a-velasco,octocat
+    with:
+      reviewers: a-velasco,octocat
     permissions:
       contents: write  # Needed to push branch & tag
       pull-requests: write  # Needed to create PR
