@@ -7,7 +7,7 @@ description: |
   Enables effective access to a MySQL cluster with Group Replication.
 
   This charm supports MySQL Router 8.0 in Kubernetes environments.
-docs: https://discourse.charmhub.io/t/pgbouncer-documentation/12133
+docs: https://discourse.charmhub.io/t/charmed-mysql-router-k8s-documentation/12130
 source: https://github.com/canonical/mysql-router-k8s-operator
 issues: https://github.com/canonical/mysql-router-k8s-operator/issues
 website:
