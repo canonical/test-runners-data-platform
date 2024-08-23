@@ -6,6 +6,6 @@ changelog:
     - title: Bugfixes
       labels:
         - bug
-    - title: Dependencies
-      authors:
-        - a-velasco
+    - title: Dependencies & other changes
+      labels:
+        - "*"
