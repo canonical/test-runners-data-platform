@@ -1,1 +1,3 @@
 Update to foo for a new release.
+
+Commits only show up on releases when they were part of a PR.
