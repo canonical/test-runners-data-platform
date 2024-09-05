@@ -144,9 +144,7 @@ def main():
                 base=base, charmcraft_yaml=charmcraft_yaml, architecture=architecture
             ):
                 continue
-            print(
-                f"[ccc-hub] Repository: {charm_.github_repository} {base=}", flush=True
-            )
+            print(f"[ccc-hub] {charm_=} {base=}", flush=True)
             # Install `build-packages`
             charm_part: dict = (
                 yaml.safe_load(charmcraft_yaml.read_text())
@@ -207,12 +205,12 @@ def main():
             env["PYENV_VERSION"] = base.python_version
             env["XDG_CACHE_HOME"] = str(pip_cache)
             print(
-                f"[ccc-hub] Building wheels for {charm_.github_repository=} {base=}",
+                f"[ccc-hub] Building wheels for {charm_=} {base=}",
                 flush=True,
             )
             subprocess.run(command, cwd=charm_.directory, check=True, env=env)
             print(
-                f"[ccc-hub] Built wheels for {charm_.github_repository=} {base=}",
+                f"[ccc-hub] Built wheels for {charm_=} {base=}",
                 flush=True,
             )
         # Rename .whl files to include relative path from `~/charmcraftcache-hub-ci/build/` and
