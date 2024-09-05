@@ -22,6 +22,13 @@ class Charm(charm.Charm):
             self._repository_directory.mkdir(parents=True)
         except FileExistsError:
             commands = [
+                [
+                    "git",
+                    "sparse-checkout",
+                    "set",
+                    "--sparse-index",
+                    self.relative_path_to_charmcraft_yaml,
+                ],
                 ["git", "fetch", "origin", self.ref],
                 ["git", "checkout", "FETCH_HEAD"],
             ]
