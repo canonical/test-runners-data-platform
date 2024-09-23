@@ -157,32 +157,31 @@ def main():
                 subprocess.run(
                     ["sudo", "apt-get", "install", *build_packages, "-y"], check=True
                 )
-            # Check for charmcraft pack wrapper (tox `build-wrapper` environment)
-            tox_environments = subprocess.run(
-                ["tox", "list", "--no-desc"],
-                capture_output=True,
-                cwd=charm_.directory,
-                check=True,
-                encoding="utf-8",
-            ).stdout.split("\n")
-            if "build-wrapper" in tox_environments:
-                print("[ccc-hub] Tox build wrapper detected", flush=True)
+            if (charm_.directory / "poetry.lock").exists():
+                print(
+                    "[ccc-hub] Converting subset of poetry.lock to requirements.txt",
+                    flush=True,
+                )
                 subprocess.run(
-                    ["tox", "run", "-e", "build-wrapper"],
+                    [
+                        "poetry",
+                        "export",
+                        "--only",
+                        "main,charm-libs",
+                        "--output",
+                        "requirements.txt",
+                    ],
                     cwd=charm_.directory,
                     check=True,
                 )
-                requirements = "requirements-last-build.txt"
-            else:
-                requirements = "requirements.txt"
-            assert (charm_.directory / requirements).exists()
+            assert (charm_.directory / "requirements.txt").exists()
             command = [
                 pyenv,
                 "exec",
                 "pip",
                 "install",
                 "-r",
-                requirements,
+                "requirements.txt",
                 # Build wheels from source
                 "--no-binary",
                 ":all:",
