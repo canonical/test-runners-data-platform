@@ -1,9 +1,9 @@
 # Copyright 2023 Canonical Ltd.
 # See LICENSE file for licensing details.
 
-name: postgresql-k8s
-display-name: Charmed PostgreSQL K8s
-summary: Charmed PostgreSQL K8s operator
+name: postgresql-k8s-test-lucas
+display-name: Test PostgreSQL K8s Lucas
+summary: Test Charmed PostgreSQL K8s operator
 description: |
   Charm to operate the PostgreSQL database on Kubernetes clusters
 docs: https://discourse.charmhub.io/t/charmed-postgresql-k8s-documenation/9307
