@@ -1,9 +1,9 @@
 # Copyright 2023 Canonical Ltd.
 # See LICENSE file for licensing details.
 
-name: postgresql
-display-name: Charmed PostgreSQL VM
-summary: Charmed PostgreSQL VM operator
+name: postgresql-test-lucas
+display-name: Charmed PostgreSQL VM test lucas
+summary: Charmed PostgreSQL VM operator test lucas
 description: |
   Charm to operate the PostgreSQL database on machines.
 docs: https://discourse.charmhub.io/t/charmed-postgresql-documentation/9710

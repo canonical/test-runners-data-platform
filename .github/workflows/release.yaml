@@ -1,42 +1,25 @@
 # Copyright 2023 Canonical Ltd.
 # See LICENSE file for licensing details.
-name: Release to Charmhub
+name: Release PG-VM to Charmhub (Lucas Test)
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'tests/**'
-      - 'docs/**'
-      - .github/renovate.json5
-      - pyproject.toml
-      - '.github/workflows/ci.yaml'
-      - '.github/workflows/lib-check.yaml'
-      - '.github/workflows/sync_docs.yaml'
+  workflow_dispatch:
 
 jobs:
-  ci-tests:
-    name: Tests
-    uses: ./.github/workflows/ci.yaml
-    secrets: inherit
-    permissions:
-      contents: write  # Needed for Allure Report beta
-
   build:
     name: Build charm
-    uses: canonical/data-platform-workflows/.github/workflows/build_charm.yaml@v21.0.1
+    uses: canonical/data-platform-workflows/.github/workflows/build_charm.yaml@lucas/test-charmcraft-3
 
   release:
     name: Release charm
     needs:
-      - ci-tests
       - build
-    uses: canonical/data-platform-workflows/.github/workflows/release_charm.yaml@v21.0.1
+    uses: canonical/data-platform-workflows/.github/workflows/release_charm.yaml@lucas/test-charmcraft-3
     with:
-      channel: 14/edge
+      channel: latest/stable
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
+      charmcraft-snap-channel: 3.x/candidate
     secrets:
-      charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}
+      charmhub-token: ${{ secrets.CHARMHUB_TOKEN_VM }}
     permissions:
       contents: write  # Needed to create GitHub release
