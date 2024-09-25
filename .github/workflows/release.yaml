@@ -8,17 +8,17 @@ on:
 jobs:
   build:
     name: Build charm
-    uses: canonical/data-platform-workflows/.github/workflows/build_charm.yaml@lucas/test-charmcraft-3
+    uses: canonical/data-platform-workflows/.github/workflows/build_charm.yaml@lucas/test-cc3-edge
 
   release:
     name: Release charm
     needs:
       - build
-    uses: canonical/data-platform-workflows/.github/workflows/release_charm.yaml@lucas/test-charmcraft-3
+    uses: canonical/data-platform-workflows/.github/workflows/release_charm.yaml@lucas/test-cc3-edge
     with:
       channel: latest/stable
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
-      charmcraft-snap-channel: 3.x/candidate
+      charmcraft-snap-channel: 3.x/edge
     secrets:
       charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}
     permissions:
