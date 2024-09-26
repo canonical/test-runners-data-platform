@@ -14,7 +14,7 @@ jobs:
       matrix:
         runner:
           - name: X64
-            runs-on: ubuntu-latest
+            runs-on: ubuntu-22.04
           - name: ARM64
             runs-on: [self-hosted, data-platform, ubuntu, ARM64, 4cpu16ram]
     name: Build wheels | ${{ matrix.runner.name }}
