@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "test-runners-data-platform"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Alex Batisse <alex.batisse@canonical.com>"]
 readme = "README.md"
