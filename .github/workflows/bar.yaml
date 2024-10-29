@@ -8,7 +8,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ghcr.io/canonical/charmed-postgresql@sha256:3abdbc00413b065fbfea8c6a3aaad8e137790ebb3e7bf5e1f42e19cbc1861926
+          image-ref: ghcr.io/canonical/charmed-postgresql:14.13-22.04_edge@sha256:3abdbc00413b065fbfea8c6a3aaad8e137790ebb3e7bf5e1f42e19cbc1861926
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'MEDIUM,HIGH,CRITICAL'
