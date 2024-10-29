@@ -1,0 +1,8 @@
+on:
+  push:
+
+jobs:
+  foo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "foo"
