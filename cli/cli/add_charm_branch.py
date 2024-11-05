@@ -51,7 +51,7 @@ main
         if not match:
             raise IssueParsingError("@carlcsaposs-canonical Error parsing issue body")
         organization = match.group("organization")
-        charm_branch = charm.Charm(
+        charm_branch = charm.CharmRef(
             github_repository=f'{organization}/{match.group("repo_name")}',
             ref=match.group("ref"),
             relative_path_to_charmcraft_yaml=match.group("path"),
@@ -83,6 +83,14 @@ main
         path = pathlib.Path(charm_branch.relative_path_to_charmcraft_yaml)
         if not path.resolve().is_relative_to(pathlib.Path(".").resolve()):
             raise IssueParsingError("Invalid path. @carlcsaposs-canonical")
+        if "ccchub" in (
+            charm_branch.github_repository,
+            charm_branch.ref,
+            charm_branch.relative_path_to_charmcraft_yaml,
+        ):
+            raise IssueParsingError(
+                "'ccchub' string is not allowed in repository name, git ref, or relative path to charmcraft.yaml. @carlcsaposs-canonical"
+            )
         with open("charms.json", "r") as file:
             charms = json.load(file)
         charm_ = dataclasses.asdict(charm_branch)
