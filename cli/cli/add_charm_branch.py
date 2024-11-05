@@ -51,7 +51,7 @@ main
         if not match:
             raise IssueParsingError("@carlcsaposs-canonical Error parsing issue body")
         organization = match.group("organization")
-        charm_branch = charm.Charm(
+        charm_branch = charm.CharmRef(
             github_repository=f'{organization}/{match.group("repo_name")}',
             ref=match.group("ref"),
             relative_path_to_charmcraft_yaml=match.group("path"),
