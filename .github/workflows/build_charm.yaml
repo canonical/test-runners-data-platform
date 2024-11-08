@@ -60,7 +60,8 @@ jobs:
           sudo iptables -F FORWARD
           sudo iptables -P FORWARD ACCEPT
 
-          sudo snap install charmcraft --classic
+          # 2.x/stable workaround for https://github.com/canonical/charmcraft/issues/1983
+          sudo snap install charmcraft --classic --channel 2.x/stable
       - run: snap list
       - name: Build charm
         run: sg lxd -c "build --github-repository='${{ inputs.github_repository }}' --ref='${{ inputs.ref }}' --relative-path-to-charmcraft-yaml='${{ inputs.relative_path_to_charmcraft_yaml }}' --base-index='${{ matrix.base.base_index }}'"
