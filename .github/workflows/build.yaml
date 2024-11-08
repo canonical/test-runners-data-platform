@@ -26,6 +26,7 @@ jobs:
 
   build:
     strategy:
+      fail-fast: false
       matrix:
         charm: ${{ fromJSON(needs.collect-charms.outputs.charms) }}
     name: ${{ matrix.charm.job_name }}
