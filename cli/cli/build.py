@@ -25,6 +25,10 @@ def main():
     charmcraft_cache_directory.mkdir(parents=True)
     env = os.environ
     env["CRAFT_SHARED_CACHE"] = str(charmcraft_cache_directory)
+    requirements = pathlib.Path(charm_dir, "requirements.txt")
+    if not requirements.exists():
+        # Workaround for https://github.com/canonical/charmcraft/issues/1389 on charmcraft 2
+        requirements.touch()
     subprocess.run(
         ["charmcraft", "pack", "-v", "--bases-index", base_index],
         cwd=charm_dir,
