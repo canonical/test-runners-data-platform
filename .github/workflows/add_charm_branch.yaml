@@ -19,9 +19,12 @@ jobs:
         run: pipx install ./cli/
       - name: Add charm to charms.json
         id: add-charm
-        run: add-charm '${{ github.event.issue.body }}'
+        run: add-charm --issue-body='${{ github.event.issue.body }}' --issue-author='${{ github.event.issue.user.login }}'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Fine-grained personal access token with permissions:
+          # - "Members" organization permissions (read)
+          READ_MEMBERS_GITHUB_PAT: ${{ secrets.READ_MEMBERS_GITHUB_PAT }}  # Expires 2025-06-24
       - name: Create pull request
         if: ${{ fromJSON(steps.add-charm.outputs.success) }}
         run: |

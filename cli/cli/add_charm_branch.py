@@ -6,6 +6,8 @@ import pathlib
 import re
 import subprocess
 
+import requests
+
 from . import charm
 
 
@@ -19,10 +21,40 @@ class IssueParsingError(ValueError):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("issue_body")
+    parser.add_argument("--issue-body", required=True)
+    parser.add_argument("--issue-author", required=True)
     args = parser.parse_args()
-    # Example issue body:
-    """### GitHub repository
+    try:
+        # Check if issue author in Canonical GitHub organization
+        response = requests.get(
+            f"https://api.github.com/orgs/canonical/members/{args.issue_author}",
+            headers={
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28",
+                "Authorization": f'Bearer {os.environ["READ_MEMBERS_GITHUB_PAT"]}',
+            },
+        )
+        if response.status_code != 204:
+            # Unable to confirm user is in Canonical GitHub organization
+
+            if response.status_code == 404:
+                # User is not in Canonical GitHub organization
+                raise IssueParsingError(
+                    "Unable to authorize GitHub user that created this issue. If you are trying "
+                    "to use charmcraftcache for a GitHub repository that is not maintained by "
+                    "Canonical, please add a comment to this issue: "
+                    "https://github.com/canonical/charmcraftcache/issues/2"
+                )
+
+            # Unknown if user is in Canonical GitHub organization; raise uncaught exception
+            response.raise_for_status()
+            raise Exception(f"Unrecognized {response.status_code=}")
+            # This code should never run; added in case `except` clause is accidentally updated to
+            # catch `Exception`
+            exit(1)
+
+        # Example issue body:
+        """### GitHub repository
 
 canonical/mysql-router-k8s-operator
 
@@ -33,8 +65,8 @@ main
 ### Relative path to charmcraft.yaml
 
 ."""
-    match = re.fullmatch(
-        r"""### GitHub repository
+        match = re.fullmatch(
+            r"""### GitHub repository
 
 (?P<organization>[a-zA-Z0-9.\-_]+)/(?P<repo_name>[a-zA-Z0-9.\-_]+)
 
@@ -45,9 +77,9 @@ main
 ### Relative path to charmcraft\.yaml
 
 (?P<path>[^\n]+)""",
-        args.issue_body,
-    )
-    try:
+            args.issue_body,
+        )
+
         if not match:
             raise IssueParsingError("@carlcsaposs-canonical Error parsing issue body")
         organization = match.group("organization")
