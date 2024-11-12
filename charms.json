@@ -128,5 +128,10 @@
     "github_repository": "canonical/charmed-etcd-operator",
     "ref": "main",
     "relative_path_to_charmcraft_yaml": "."
+  },
+  {
+    "github_repository": "canonical/mysql-router-k8s-operator",
+    "ref": "mainn",
+    "relative_path_to_charmcraft_yaml": "."
   }
 ]
