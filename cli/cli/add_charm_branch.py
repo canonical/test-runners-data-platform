@@ -25,34 +25,6 @@ def main():
     parser.add_argument("--issue-author", required=True)
     args = parser.parse_args()
     try:
-        # Check if issue author in Canonical GitHub organization
-        response = requests.get(
-            f"https://api.github.com/orgs/canonical/members/{args.issue_author}",
-            headers={
-                "Accept": "application/vnd.github+json",
-                "X-GitHub-Api-Version": "2022-11-28",
-                "Authorization": f'Bearer {os.environ["READ_MEMBERS_GITHUB_PAT"]}',
-            },
-        )
-        if response.status_code != 204:
-            # Unable to confirm user is in Canonical GitHub organization
-
-            if response.status_code == 404:
-                # User is not in Canonical GitHub organization
-                raise IssueParsingError(
-                    "Unable to authorize GitHub user that created this issue. If you are trying "
-                    "to use charmcraftcache for a GitHub repository that is not maintained by "
-                    "Canonical, please add a comment to this issue: "
-                    "https://github.com/canonical/charmcraftcache/issues/2"
-                )
-
-            # Unknown if user is in Canonical GitHub organization; raise uncaught exception
-            response.raise_for_status()
-            raise Exception(f"Unrecognized {response.status_code=}")
-            # This code should never run; added in case `except` clause is accidentally updated to
-            # catch `Exception`
-            exit(1)
-
         # Example issue body:
         """### GitHub repository
 
