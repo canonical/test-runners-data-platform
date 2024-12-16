@@ -107,7 +107,7 @@ jobs:
     name: Integration | ${{ matrix.juju.agent || matrix.juju.snap_channel }} | ${{ matrix.architecture }}
     needs:
       - build
-    uses: canonical/data-platform-workflows/.github/workflows/integration_test_charm.yaml@v23.0.2
+    uses: canonical/data-platform-workflows/.github/workflows/integration_test_charm.yaml@v23.1.1
     with:
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
       architecture: ${{ matrix.architecture }}
