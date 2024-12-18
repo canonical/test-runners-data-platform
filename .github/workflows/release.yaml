@@ -15,16 +15,18 @@ jobs:
 
   build:
     name: Build charm
-    uses: canonical/data-platform-workflows/.github/workflows/build_charm.yaml@v23.1.1
+    uses: canonical/data-platform-workflows/.github/workflows/build_charm.yaml@charmcraftst124
+    with:
+      charmcraft-snap-channel: 3.x/edge
 
   release:
     name: Release charm
     needs:
-      - ci-tests
       - build
-    uses: canonical/data-platform-workflows/.github/workflows/release_charm.yaml@v23.1.1
+    uses: canonical/data-platform-workflows/.github/workflows/release_charm.yaml@charmcraftst124
     with:
-      channel: 8.0/edge
+      charmcraft-snap-channel: 3.x/edge
+      channel: latest/edge
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
     secrets:
       charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}
