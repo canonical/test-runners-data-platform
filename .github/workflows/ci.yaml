@@ -26,5 +26,3 @@ jobs:
   build:
     name: Build charm
     uses: canonical/data-platform-workflows/.github/workflows/build_charm.yaml@charm-refresh-versioning
-    with:
-      cache: false
