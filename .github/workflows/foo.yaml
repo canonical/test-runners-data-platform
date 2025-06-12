@@ -3,10 +3,7 @@ on:
 
 jobs:
   foo:
-    strategy:
-      matrix:
-        foo: [1,2,3,4]
-        bar: [1,2,3]
-    runs-on: [self-hosted, data-platform, ubuntu, ARM64, 4cpu16ram]
+    runs-on: [self-hosted, ubuntu, ARM64, large, noble]
     steps:
-      - run: echo 'Hello, world!'
+      - run: sudo apt-get install cpu-checker
+      - run: sudo kvm-ok
