@@ -3,7 +3,7 @@ on:
 
 jobs:
   foo:
-    runs-on: [self-hosted, ubuntu, ARM64, large, noble]
+    runs-on: [self-hosted, ARM64, large, noble]
     steps:
       - run: sudo apt-get install cpu-checker
       - run: sudo kvm-ok
