@@ -3,7 +3,7 @@ on:
 
 jobs:
   foo:
-    runs-on: [self-hosted, noble, ARM64]
+    runs-on: [self-hosted, noble, ARM64, large]
     steps:
       - run: sudo apt-get update
       - run: sudo apt-get install cpu-checker -y
