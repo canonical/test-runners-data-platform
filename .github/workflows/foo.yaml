@@ -3,7 +3,8 @@ on:
 
 jobs:
   foo:
-    runs-on: self-hosted-linux-arm64-noble-large
+    runs-on: [self-hosted, noble, ARM64]
     steps:
       - run: sudo apt-get install cpu-checker
+      - run: sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
       - run: sudo kvm-ok
