@@ -5,6 +5,7 @@ jobs:
   foo:
     runs-on: [self-hosted, noble, ARM64]
     steps:
-      - run: sudo apt-get install cpu-checker
-      - run: sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
+      - run: sudo apt-get update
+      - run: sudo apt-get install cpu-checker -y
+      - run: sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils -y
       - run: sudo kvm-ok
