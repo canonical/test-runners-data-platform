@@ -94,9 +94,9 @@ environment:
 
 apps:
   createdb:
-    command: usr/bin/createdb
+    command: setpriv.sh $SNAP/usr/bin/createdb
   createuser:
-    command: usr/bin/createuser
+    command: setpriv.sh $SNAP/usr/bin/createuser
   ldap-sync:
     command: start-ldap-synchronizer.sh
     daemon: simple
@@ -120,65 +120,49 @@ apps:
   patroni-raft-controller:
     command: usr/bin/patroni_raft_controller
   patronictl:
-    command: usr/bin/patronictl
+    command: setpriv.sh $SNAP/usr/bin/patronictl
     plugs:
       - network
   patroni-aws:
-    command: usr/bin/patroni_aws
+    command: setpriv.sh $SNAP/usr/bin/patroni_aws
   patroni-wale-restore:
-    command: usr/bin/patroni_wale_restore
+    command: setpriv.sh $SNAP/usr/bin/patroni_wale_restore
   pg-archivecleanup:
-    command: usr/bin/pg_archivecleanup
+    command: setpriv.sh $SNAP/usr/bin/pg_archivecleanup
   pg-buildext:
-    command: usr/bin/pg_buildext
-  pg-createcluster:
-    command: usr/bin/pg_createcluster
-  pg-dropcluster:
-    command: usr/bin/pg_dropcluster
+    command: setpriv.sh $SNAP/usr/bin/pg_buildext
   pg-isready:
-    command: usr/bin/pg_isready
+    command: setpriv.sh $SNAP/usr/bin/pg_isready
   pg-restore:
-    command: usr/bin/pg_restore
+    command: setpriv.sh $SNAP/usr/bin/pg_restore
     plugs:
       - network
-  pg-upgradecluster:
-    command: usr/bin/pg_upgradecluster
-  pg-backupcluster:
-    command: usr/bin/pg_backupcluster
   pg-config:
-    command: usr/bin/pg_config
+    command: setpriv.sh $SNAP/usr/bin/pg_config
   pg-dump:
-    command: usr/bin/pg_dump
+    command: setpriv.sh $SNAP/usr/bin/pg_dump
     plugs:
       - network
-  pg-lsclusters:
-    command: usr/bin/pg_lsclusters
   pg-recvlogical:
-    command: usr/bin/pg_recvlogical
-  pg-restorecluster:
-    command: usr/bin/pg_restorecluster
+    command: setpriv.sh $SNAP/usr/bin/pg_recvlogical
   pg-virtualenv:
-    command: usr/bin/pg_virtualenv
+    command: setpriv.sh $SNAP/usr/bin/pg_virtualenv
   pg-basebackup:
-    command: usr/bin/pg_basebackup
+    command: setpriv.sh $SNAP/usr/bin/pg_basebackup
   pg-conftool:
-    command: usr/bin/pg_conftool
+    command: setpriv.sh $SNAP/usr/bin/pg_conftool
   pg-ctl:
-    command: usr/lib/postgresql/16/bin/pg_ctl
-  pg-ctlcluster:
-    command: usr/bin/pg_ctlcluster
+    command: setpriv.sh $SNAP/usr/lib/postgresql/16/bin/pg_ctl
   pg-dumpall:
-    command: usr/bin/pg_dumpall
+    command: setpriv.sh $SNAP/usr/bin/pg_dumpall
     plugs:
       - network
   pg-receivewal:
-    command: usr/bin/pg_receivewal
-  pg-renamecluster:
-    command: usr/bin/pg_renamecluster
+    command: setpriv.sh $SNAP/usr/bin/pg_receivewal
   pg-updatedicts:
-    command: usr/sbin/pg_updatedicts
+    command: setpriv.sh $SNAP/usr/sbin/pg_updatedicts
   pgbackrest:
-    command: usr/bin/pgbackrest
+    command: setpriv.sh $SNAP/usr/bin/pgbackrest
     plugs:
       - network
   pgbackrest-service:
@@ -198,7 +182,7 @@ apps:
   pgbench:
     command: usr/bin/pgbench
   pgbouncer:
-    command: usr/sbin/pgbouncer
+    command: setpriv.sh $SNAP/usr/sbin/pgbouncer
   pgbouncer-server:
     command: start-pgbouncer.sh
     plugs:
@@ -217,7 +201,7 @@ apps:
       - network
       - network-bind
   psql:
-    command: usr/bin/psql
+    command: setpriv.sh $SNAP/usr/bin/psql
     plugs:
       - network
   syncobj-admin:
