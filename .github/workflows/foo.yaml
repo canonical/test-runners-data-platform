@@ -5,5 +5,4 @@ jobs:
   foo:
     runs-on: [self-hosted, s390x, noble]
     steps:
-      - run: lscpu
-      - run: cat /proc/meminfo
+      - run: python3 -c "import platform; print(platform.machine())"
