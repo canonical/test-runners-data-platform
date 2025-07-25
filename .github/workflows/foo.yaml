@@ -3,6 +3,9 @@ on:
 
 jobs:
   foo:
-    runs-on: [self-hosted, s390x, noble]
+    runs-on: [self-hosted, s390x, noble, medium]
     steps:
       - run: python3 -c "import platform; print(platform.machine())"
+      - run: lscpu
+      - run: cat /proc/meminfo
+      - uses: lhotari/action-upterm@v1
