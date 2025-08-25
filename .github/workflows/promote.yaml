@@ -1,0 +1,8 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  foo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
