@@ -20,7 +20,7 @@ jobs:
     name: Check libraries
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    if: ${{ github.event.pull_request.head.repo.full_name == 'canonical/mysql-router-k8s-operator' }}
+    if: ${{ github.event.pull_request.head.repo.full_name == 'canonical/mysql-router-operators' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5

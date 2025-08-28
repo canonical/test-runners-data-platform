@@ -7,7 +7,7 @@ this operator.
 
 - Generally, before developing enhancements to this charm, you should consider
   [opening an issue
-  ](https://github.com/canonical/mysql-router-k8s-operator/issues) explaining
+  ](https://github.com/canonical/mysql-router-operators/issues) explaining
   your use case.
 - If you would like to chat with us about your use-cases or proposed
   implementation, you can reach us at [Canonical Mattermost public
