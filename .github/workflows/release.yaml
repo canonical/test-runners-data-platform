@@ -30,13 +30,19 @@ jobs:
       contents: write  # Needed for Allure Report
 
   release:
-    name: Release charm
+    strategy:
+      matrix:
+        path:
+          - kubernetes
+          - machines
+    name: Release charm | ${{ matrix.path }}
     needs:
       - tag
       - ci-tests
     uses: canonical/data-platform-workflows/.github/workflows/release_charm_edge.yaml@v34.0.1
     with:
       track: ${{ needs.tag.outputs.track }}
+      path-to-charm-directory: ${{ matrix.path }}
       artifact-prefix: ${{ needs.ci-tests.outputs.artifact-prefix }}
     secrets:
       charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}

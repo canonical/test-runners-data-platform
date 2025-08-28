@@ -17,7 +17,12 @@ on:
 
 jobs:
   lib-check:
-    name: Check libraries
+    strategy:
+      matrix:
+        path:
+          - kubernetes
+          - machines
+    name: Check libraries | ${{ matrix.path }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     if: ${{ github.event.pull_request.head.repo.full_name == 'canonical/mysql-router-operators' }}
@@ -29,5 +34,6 @@ jobs:
       - name: Check libs
         uses: canonical/charming-actions/check-libraries@2.7.0
         with:
+          charm-path: ${{ matrix.path }}
           credentials: "${{ secrets.CHARMHUB_TOKEN }}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
