@@ -37,16 +37,11 @@ jobs:
       - name: Run tox tests to create coverage.xml
         run: tox run -e unit
 
-      - name: Move results to necessary folder for TICS
-        run: |
-          mkdir -p .cover
-          mv coverage.xml .cover/cobertura.xml
-
       - name: Run TICS analysis with github-action
         uses: tiobe/tics-github-action@v3
         with:
           mode: qserver
-          project: mysql-router-k8s-operator
+          project: mysql-router-operators
           branchdir: .
           viewerUrl: https://canonical.tiobe.com/tiobeweb/TICS/api/cfg?name=default
           ticsAuthToken: ${{ secrets.TICSAUTHTOKEN }}
