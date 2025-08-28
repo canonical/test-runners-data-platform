@@ -15,7 +15,7 @@ on:
 
 jobs:
   collect-integration-tests:
-    name: Collect integration test spread jobs
+    name: Collect spread jobs | ${{ inputs.path-to-charm-directory }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
