@@ -26,24 +26,27 @@ this operator.
   creates a linear Git commit history.
 
 ## Developing
-Install `tox`, `poetry`, and `charmcraftcache`
+Install `tox`, `poetry`, `charmcraftcache`, and `charmcraftlocal`
 
 Install pipx: https://pipx.pypa.io/stable/installation/
 ```shell
 pipx install tox
 pipx install poetry
 pipx install charmcraftcache
+pipx install charmcraftlocal
 ```
 
 You can create an environment for development:
 
 ```shell
+cd kubernetes/  # or cd machines/
 poetry install
 ```
 
 ### Testing
 
 ```shell
+cd kubernetes/  # or cd machines/
 tox run -e format        # update your code according to linting rules
 tox run -e lint          # code style
 tox run -e unit          # unit tests
@@ -56,7 +59,8 @@ tox                      # runs 'lint' and 'unit' environments
 Build the charm in this git repository using:
 
 ```shell
-charmcraftcache pack
+cd kubernetes/  # or cd machines/
+charmcraftlocal pack
 ```
 
 ### Deploy
