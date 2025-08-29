@@ -613,20 +613,6 @@ async def ensure_all_units_continuous_writes_incrementing(
                     last_max_written_value = max_written_value
 
 
-async def get_workload_version(ops_test: OpsTest, unit_name: str) -> str:
-    """Get the workload version of the deployed router charm."""
-    return_code, output, _ = await ops_test.juju(
-        "ssh",
-        unit_name,
-        "sudo",
-        "cat",
-        f"/var/lib/juju/agents/unit-{unit_name.replace('/', '-')}/charm/workload_version",
-    )
-
-    assert return_code == 0
-    return output.strip()
-
-
 async def get_leader_unit(
     ops_test: Optional[OpsTest], app_name: str, model: Optional[Model] = None
 ) -> Optional[Unit]:
