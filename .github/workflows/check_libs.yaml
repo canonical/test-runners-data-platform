@@ -37,6 +37,4 @@ jobs:
           credentials: "${{ secrets.CHARMHUB_TOKEN }}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
     permissions:
-      statuses: write
-      checks: write
-      actions: write
+      issues: read
