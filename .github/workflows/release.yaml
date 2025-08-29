@@ -5,7 +5,7 @@ name: Release to Charmhub edge
 on:
   push:
     branches:
-      - main
+      - dpe
     paths-ignore:
       - 'docs/**'
       - '.github/renovate.json5'

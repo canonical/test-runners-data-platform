@@ -14,7 +14,7 @@ on:
       - '.github/renovate.json5'
   schedule:
     - cron: '53 0 * * *'  # Daily at 00:53 UTC
-  # Triggered on push to branch "main" by .github/workflows/release.yaml
+  # Triggered on push to branch "dpe" by .github/workflows/release.yaml
   workflow_call:
     outputs:
       artifact-prefix:
