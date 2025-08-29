@@ -3,7 +3,7 @@
 name: Check libs
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-1
   cancel-in-progress: true
 
 on:
@@ -37,4 +37,4 @@ jobs:
           credentials: "${{ secrets.CHARMHUB_TOKEN }}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
     permissions:
-      issues: read
+      issues: write
