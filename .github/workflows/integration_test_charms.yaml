@@ -21,6 +21,7 @@ jobs:
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       path-to-charm-directory: ${{ matrix.path }}
+    secrets: inherit
 
   allure-report:
     # TODO future improvement: use concurrency group for job
