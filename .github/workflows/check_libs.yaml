@@ -36,3 +36,7 @@ jobs:
           charm-path: ${{ matrix.path }}
           credentials: "${{ secrets.CHARMHUB_TOKEN }}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+    permissions:
+      statuses: write
+      checks: write
+      actions: write
