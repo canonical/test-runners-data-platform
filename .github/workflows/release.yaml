@@ -26,6 +26,7 @@ jobs:
     needs:
       - tag
     uses: ./.github/workflows/ci.yaml
+    secrets: inherit
     permissions:
       contents: write  # Needed for Allure Report
 
