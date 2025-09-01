@@ -33,17 +33,19 @@ jobs:
   release:
     strategy:
       matrix:
-        path:
-          - kubernetes
-          - machines
-    name: Release charm | ${{ matrix.path }}
+        charm:
+          - path: kubernetes
+            track: '8.0'
+          - path: machines
+            track: ${{ needs.tag.outputs.track }}
+    name: Release charm | ${{ matrix.charm.path }}
     needs:
       - tag
       - ci-tests
     uses: canonical/data-platform-workflows/.github/workflows/release_charm_edge.yaml@v35.0.2
     with:
-      track: ${{ needs.tag.outputs.track }}
-      path-to-charm-directory: ${{ matrix.path }}
+      track: ${{ matrix.charm.track }}
+      path-to-charm-directory: ${{ matrix.charm.path }}
       artifact-prefix: ${{ needs.ci-tests.outputs.artifact-prefix }}
     secrets:
       charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}
