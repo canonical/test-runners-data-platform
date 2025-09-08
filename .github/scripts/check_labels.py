@@ -18,6 +18,23 @@ required_labels = [
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 
+def fetch_issue(issue_number: int):
+    url = f"https://api.github.com/repos/{REPO}/issues/{issue_number}"
+    logging.info(f"Fetching issue #{issue_number} from {REPO}")
+    resp = requests.get(
+        url,
+        headers={
+            "Authorization": f"Bearer {TOKEN}",
+            "Accept": "application/vnd.github+json",
+        },
+    )
+    if resp.status_code != 200:
+        raise RuntimeError(
+            f"Failed to fetch issue #{issue_number}: {resp.status_code} {resp.text}"
+        )
+    return resp.json()
+
+
 def comment_on_issue(issue_number: int, message: str) -> None:
     """Post a comment on the given issue."""
     url = f"https://api.github.com/repos/{REPO}/issues/{issue_number}/comments"
@@ -31,33 +48,26 @@ def comment_on_issue(issue_number: int, message: str) -> None:
         json={"body": message},
     )
     if resp.status_code != 201:
-        logging.error(f"Failed to post comment: {resp.status_code} {resp.text}")
-        sys.exit(1)
-    else:
-        logging.info("Comment posted successfully.")
+        raise RuntimeError(
+            f"Failed to post comment: {resp.status_code} {resp.text}"
+        )
+    logging.info("Comment posted successfully.")
+
+
+def check_labels(issue_data: dict, required: list[str]) -> None:
+    labels = [label["name"] for label in issue_data.get("labels", [])]
+    logging.info(f"Labels on issue #{ISSUE_NUMBER}: {labels}")
+    missing = [label for label in required if label not in labels]
+    if missing:
+        raise ValueError(f"Missing labels: {missing}")
+
 
 def main():
-    url = f"https://api.github.com/repos/{REPO}/issues/{ISSUE_NUMBER}"
-    logging.info(f"Fetching issue #{ISSUE_NUMBER} from {REPO}")
-    resp = requests.get(url, headers={
-        "Authorization": f"Bearer {TOKEN}",
-        "Accept": "application/vnd.github+json"
-    })
-    if resp.status_code != 200:
-        logging.error(f"Failed to fetch issue #{ISSUE_NUMBER}: {resp.status_code} {resp.text}")
-        sys.exit(1)
+    issue_data = fetch_issue(ISSUE_NUMBER)
+    check_labels(issue_data, required_labels)
+    logging.info("All required labels are present. Stable release approved!")
+    comment_on_issue(ISSUE_NUMBER, "Released to stable")
 
-    data = resp.json()
-    labels = [label["name"] for label in data.get("labels", [])]
-    logging.info(f"Labels on issue #{ISSUE_NUMBER}: {labels}")
-
-    missing = [label for label in required_labels if label not in labels]
-    if not missing:
-        logging.info("All required labels are present. Stable release approved!")
-        comment_on_issue(ISSUE_NUMBER, "Released to stable: <release notes link>")
-    else:
-        logging.warning(f"Missing labels: {missing}")
-        sys.exit(1)
 
 if __name__ == "__main__":
     main()
