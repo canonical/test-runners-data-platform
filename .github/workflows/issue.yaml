@@ -6,6 +6,8 @@ on:
 jobs:
   check-approvals:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write        # needed to comment on issues
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
