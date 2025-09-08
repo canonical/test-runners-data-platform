@@ -1,0 +1,30 @@
+name: Check Stable Release Approvals
+
+on:
+  issues:
+    types:
+      - labeled
+
+jobs:
+  check-approvals:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write    # needed to comment on issues
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Check issue labels
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: python .github/scripts/check_labels.py
