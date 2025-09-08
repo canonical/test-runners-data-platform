@@ -7,7 +7,7 @@ import subprocess
 
 REPO = os.environ["GITHUB_REPOSITORY"]
 TOKEN = os.environ["GITHUB_TOKEN"]
-ISSUE_NUMBER = 60
+ISSUE_NUMBER = int(os.environ["ISSUE_NUMBER"])
 
 required_labels = [
     "stable: Solutions QA tests passed",
