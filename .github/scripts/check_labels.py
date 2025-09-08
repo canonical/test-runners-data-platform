@@ -31,26 +31,26 @@ def fetch_issue(issue_number: int) -> dict:
     return json.loads(result.stdout)
 
 
-def comment_on_issue(issue_number: int, message: str) -> None:
-    """Post a comment on the given issue."""
-    logging.info(f"Posting comment to issue #{issue_number}: {message!r}")
+def comment_and_close_issue(issue_number: int, message: str) -> None:
+    """Post a comment and close the given issue."""
+    logging.info(f"Closing issue #{issue_number} with comment: {message!r}")
     result = subprocess.run(
         [
             "gh",
             "issue",
-            "comment",
+            "close",
             str(issue_number),
             "--repo",
             REPO,
-            "--body",
+            "--comment",
             message,
         ],
         capture_output=True,
         text=True,
     )
     if result.returncode != 0:
-        raise RuntimeError(f"gh issue comment failed: {result.stderr.strip()}")
-    logging.info("Comment posted successfully.")
+        raise RuntimeError(f"gh issue close failed: {result.stderr.strip()}")
+    logging.info("Issue closed with comment successfully.")
 
 
 def check_labels(issue_data: dict, required: list[str]) -> None:
@@ -65,7 +65,7 @@ def main():
     issue_data = fetch_issue(ISSUE_NUMBER)
     check_labels(issue_data, required_labels)
     logging.info("All required labels are present. Stable release approved!")
-    comment_on_issue(ISSUE_NUMBER, "Released to stable")
+    comment_and_close_issue(ISSUE_NUMBER, "Released to stable")
 
 
 if __name__ == "__main__":
