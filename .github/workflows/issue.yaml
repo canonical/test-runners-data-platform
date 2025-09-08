@@ -7,6 +7,10 @@ on:
 
 jobs:
   check-approvals:
+    if: >
+      startsWith(github.event.issue.title, 'Release') &&
+      endsWith(github.event.issue.title, ' to stable') &&
+      github.event.issue.user.login == 'nohaihab'
     runs-on: ubuntu-latest
     permissions:
       issues: write    # needed to comment on issues
