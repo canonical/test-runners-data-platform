@@ -1,8 +1,0 @@
-on:
-  workflow_dispatch:
-
-jobs:
-  foo:
-    runs-on: [self-hosted, s390x, noble]
-    steps:
-      - uses: canonical/action-tmate@main

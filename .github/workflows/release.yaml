@@ -1,0 +1,71 @@
+# Copyright 2023 Canonical Ltd.
+# See LICENSE file for licensing details.
+name: Release to Charmhub edge
+
+on:
+  push:
+    branches:
+      - dpe
+    paths-ignore:
+      - 'docs/**'
+      - '.github/renovate.json5'
+      - '.github/workflows/check_libs.yaml'
+      - '.github/workflows/sync_docs.yaml'
+
+jobs:
+  tag:
+    name: Create charm refresh compatibility version git tag
+    uses: canonical/data-platform-workflows/.github/workflows/tag_charm_edge.yaml@v35.0.2
+    with:
+      track: 'dpe'
+    permissions:
+      contents: write  # Needed to create git tag
+
+  ci-tests:
+    name: Tests
+    needs:
+      - tag
+    uses: ./.github/workflows/ci.yaml
+    secrets: inherit
+    permissions:
+      contents: write  # Needed for Allure Report
+
+  release:
+    strategy:
+      matrix:
+        charm:
+          - path: kubernetes
+            track: '8.0'
+          - path: machines
+            track: ${{ needs.tag.outputs.track }}
+    name: Release charm | ${{ matrix.charm.path }}
+    needs:
+      - tag
+      - ci-tests
+    uses: canonical/data-platform-workflows/.github/workflows/release_charm_edge.yaml@v35.0.2
+    with:
+      track: ${{ matrix.charm.track }}
+      path-to-charm-directory: ${{ matrix.charm.path }}
+      artifact-prefix: ${{ needs.ci-tests.outputs.artifact-prefix }}
+    secrets:
+      charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}
+    permissions:
+      contents: write  # Needed to create git tags
+
+  mirror:
+    strategy:
+      matrix:
+        charm:
+          - path: kubernetes
+            repo: canonical/mysql-router-k8s-operator
+          - path: machines
+            repo: canonical/mysql-router-operator
+    name: Mirror charm | ${{ matrix.charm.path }}
+    needs:
+      - release
+    uses: canonical/data-platform-workflows/.github/workflows/_mirror_charm.yaml@v35.0.2
+    with:
+      path-to-charm-directory: ${{ matrix.charm.path }}
+      repository: ${{ matrix.charm.repo }}
+    secrets:
+      token: ${{ secrets.MIRROR_REPOS_PAT }}
