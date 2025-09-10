@@ -1,0 +1,23 @@
+# Copyright 2025 Canonical Ltd.
+# See LICENSE file for licensing details.
+name: Promote charm to candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      refresh-compat-version:
+        description: charm refresh compatibility version
+        required: true
+        type: string
+
+jobs:
+  promote:
+    name: Promote charm to candidate
+    uses: canonical/data-platform-workflows/.github/workflows/_promote_charms_to_candidate.yaml@promote-workflow-frequent-releases
+    with:
+      track: 'dpe'
+      refresh-compat-version: ${{ inputs.refresh-compat-version }}
+    secrets:
+      charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}
+    permissions:
+      contents: write  # Needed to edit GitHub releases
