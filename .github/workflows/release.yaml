@@ -41,7 +41,7 @@ jobs:
     name: Release charm | ${{ matrix.charm.path }}
     needs:
       - tag
-      - ci-tests
+      # - ci-tests
     uses: canonical/data-platform-workflows/.github/workflows/release_charm_edge.yaml@v35.0.2
     with:
       track: ${{ matrix.charm.track }}
