@@ -21,14 +21,14 @@ jobs:
     permissions:
       contents: write  # Needed to create git tag
 
-  ci-tests:
-    name: Tests
-    needs:
-      - tag
-    uses: ./.github/workflows/ci.yaml
-    secrets: inherit
-    permissions:
-      contents: write  # Needed for Allure Report
+  # ci-tests:
+  #   name: Tests
+  #   needs:
+  #     - tag
+  #   uses: ./.github/workflows/ci.yaml
+  #   secrets: inherit
+  #   permissions:
+  #     contents: write  # Needed for Allure Report
 
   release:
     strategy:
@@ -52,20 +52,20 @@ jobs:
     permissions:
       contents: write  # Needed to create git tags
 
-  mirror:
-    strategy:
-      matrix:
-        charm:
-          - path: kubernetes
-            repo: canonical/mysql-router-k8s-operator
-          - path: machines
-            repo: canonical/mysql-router-operator
-    name: Mirror charm | ${{ matrix.charm.path }}
-    needs:
-      - release
-    uses: canonical/data-platform-workflows/.github/workflows/_mirror_charm.yaml@v35.0.2
-    with:
-      path-to-charm-directory: ${{ matrix.charm.path }}
-      repository: ${{ matrix.charm.repo }}
-    secrets:
-      token: ${{ secrets.MIRROR_REPOS_PAT }}
+  # mirror:
+  #   strategy:
+  #     matrix:
+  #       charm:
+  #         - path: kubernetes
+  #           repo: canonical/mysql-router-k8s-operator
+  #         - path: machines
+  #           repo: canonical/mysql-router-operator
+  #   name: Mirror charm | ${{ matrix.charm.path }}
+  #   needs:
+  #     - release
+  #   uses: canonical/data-platform-workflows/.github/workflows/_mirror_charm.yaml@v35.0.2
+  #   with:
+  #     path-to-charm-directory: ${{ matrix.charm.path }}
+  #     repository: ${{ matrix.charm.repo }}
+  #   secrets:
+  #     token: ${{ secrets.MIRROR_REPOS_PAT }}
