@@ -1,23 +1,23 @@
 # Copyright 2025 Canonical Ltd.
 # See LICENSE file for licensing details.
-name: Promote charm to candidate
+name: Promote charm
 
 on:
-  workflow_dispatch:
-    inputs:
-      refresh-compat-version:
-        description: charm refresh compatibility version
-        required: true
-        type: string
+  schedule:
+    # Run every 42 days (~6 weeks) at 00:00 UTC
+    - cron: "0 0 */42 * *"
 
 jobs:
   promote:
     name: Promote charm to candidate
     uses: canonical/data-platform-workflows/.github/workflows/_promote_charms_to_candidate.yaml@promote-workflow-frequent-releases
     with:
+      refresh-compat-version: '1.0'
       track: 'dpe'
-      refresh-compat-version: ${{ inputs.refresh-compat-version }}
+      charmcraft-snap-channel: 'latest/stable'
     secrets:
       charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}
+      mattermost-webhook-url: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
     permissions:
-      contents: write  # Needed to edit GitHub releases
+      contents: write # Needed to edit GitHub releases
+      issues: write  # Needed to create GitHub issues
