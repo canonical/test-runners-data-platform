@@ -1,6 +1,7 @@
 name: Test week check
 
 on:
+  pull_request:
   workflow_dispatch:
   schedule:
     - cron: '43 0 * * 2'  # Every Tuesday at 00:43 UTC
