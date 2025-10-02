@@ -3,7 +3,7 @@ name: Test week check
 on:
   workflow_dispatch:
   schedule:
-    - cron: '43 0 * * 2'  # Every Tuesday at 00:43 UTC
+    - cron: '43 0 * * 2'  # Every Tuesday at 00:43
 
 jobs:
   refine-cron:
