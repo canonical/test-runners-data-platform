@@ -1,7 +1,7 @@
 # Copyright 2023 Canonical Ltd.
 # See LICENSE file for licensing details.
 
-name: mysql-k8s
+name: test-foo-vyehgdwjgg-k8s
 display-name: Charmed MySQL K8s
 summary: Charmed MySQL K8s operator
 description: |
