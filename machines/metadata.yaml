@@ -1,6 +1,6 @@
 # Copyright 2023 Canonical Ltd.
 # See LICENSE file for licensing details.
-name: mysql-router
+name: test-foo-vyehgdwjgg
 display-name: MySQL Router
 summary: Charmed MySQL Router VM operator
 description: |

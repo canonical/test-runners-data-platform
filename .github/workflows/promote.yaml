@@ -25,9 +25,9 @@ on:
 jobs:
   promote:
     name: Promote charm
-    uses: canonical/data-platform-workflows/.github/workflows/_promote_charms.yaml@v35.0.2
+    uses: canonical/data-platform-workflows/.github/workflows/_promote_charms.yaml@promote-legacy
     with:
-      track: 'dpe'
+      track: 'latest'
       from-risk: ${{ inputs.from-risk }}
       to-risk: ${{ inputs.to-risk }}
     secrets:

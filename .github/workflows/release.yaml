@@ -5,7 +5,7 @@ name: Release to Charmhub edge
 on:
   push:
     branches:
-      - dpe
+      - main
     paths-ignore:
       - 'docs/**'
       - '.github/renovate.json5'
@@ -17,7 +17,7 @@ jobs:
     name: Create charm refresh compatibility version git tag
     uses: canonical/data-platform-workflows/.github/workflows/tag_charm_edge.yaml@v35.0.2
     with:
-      track: 'dpe'
+      track: 'latest'
     permissions:
       contents: write  # Needed to create git tag
 
@@ -35,7 +35,7 @@ jobs:
       matrix:
         charm:
           - path: kubernetes
-            track: '8.0'
+            track: 'latest'
           - path: machines
             track: ${{ needs.tag.outputs.track }}
     name: Release charm | ${{ matrix.charm.path }}
