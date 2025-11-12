@@ -1,7 +1,7 @@
 # Copyright 2023 Canonical Ltd.
 # See LICENSE file for licensing details.
 
-name: postgresql
+name: test-foo-vyehgdwjgg
 display-name: Charmed PostgreSQL VM
 summary: Charmed PostgreSQL 16 for VMs
 description: |
