@@ -1,0 +1,8 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  foo:
+    runs-on: self-hosted-linux-amd64-noble-large
+    steps:
+      - uses: canonical/action-tmate@main
