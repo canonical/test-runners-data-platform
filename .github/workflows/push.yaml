@@ -9,13 +9,9 @@ on:
       - stable/2024.1
 
 jobs:
-  modified_rocks:
-    uses: ./.github/workflows/modified_rocks.yaml
-
   build-and-publish:
-    needs: modified_rocks
     uses: ./.github/workflows/build_publish.yaml
     with:
-      rocks: ${{ needs.modified_rocks.outputs.rocks }}
+      rocks: ${{ toJSON(['neutron-server']) }}
       publish: true
       branch: ${{ github.ref }}
