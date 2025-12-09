@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         rock: ${{ fromJson(inputs.rocks) }}
-    uses: canonical/data-platform-workflows/.github/workflows/release_rock.yaml@v32.2.0
+    uses: canonical/data-platform-workflows/.github/workflows/release_rock.yaml@fix-release-rock
     with:
       path-to-rock-directory: rocks/${{ matrix.rock }}
       artifact-prefix: packed-rock-${{ matrix.rock }}
