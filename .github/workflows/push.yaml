@@ -12,6 +12,6 @@ jobs:
   build-and-publish:
     uses: ./.github/workflows/build_publish.yaml
     with:
-      rocks: ${{ toJSON(['neutron-server']) }}
+      rocks: '["neutron-server"]'
       publish: true
       branch: ${{ github.ref }}
