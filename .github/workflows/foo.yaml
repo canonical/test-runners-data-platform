@@ -14,3 +14,11 @@ jobs:
     runs-on: ubuntu-22.04-arm
     steps:
       - run: echo foo
+  foo4:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo foo
+  foo5:
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo foo
