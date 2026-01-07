@@ -1,7 +1,7 @@
 on:
   # GitHub will only trigger workflows `on: schedule` for workflow files in the default GitHub branch
   schedule:
-    - cron: '10 15 * * *'  # Daily at 00:53 UTC
+    - cron: '30 17 * * *'  # Daily at 00:53 UTC
 
 jobs:
   trigger:
