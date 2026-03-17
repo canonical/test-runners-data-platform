@@ -1,0 +1,8 @@
+on:
+  push:
+
+jobs:
+  foo:
+    runs-on: self-hosted-linux-s390x-noble-edge
+    steps:
+      - run: exit 1
