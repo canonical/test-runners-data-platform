@@ -17,35 +17,9 @@ on:
 
 permissions: {}
 jobs:
-  lint:
-    name: Lint
-    uses: canonical/data-platform-workflows/.github/workflows/lint.yaml@v42.0.1
-
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v42.0.1
-
-  smoke:
-    name: Smoke test snap
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs:
-      - lint
-      - build
-    steps:
-      - name: Uninstall Postgresql
-        run: |
-          sudo apt --purge remove postgresql*
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Install tox & poetry
-        run: |
-          pipx install tox
-          pipx install poetry
-      - name: Download snap package(s)
-        uses: actions/download-artifact@v8
-        with:
-          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
-          merge-multiple: true
-      - name: Run tests
-        run: tox run -e smoke
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@remove-candid
+    permissions:
+      actions: read  # Needed for GitHub API call to get workflow version
+      contents: read

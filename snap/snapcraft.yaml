@@ -1,5 +1,5 @@
 # yamllint disable rule:line-length
-name: charmed-postgresql
+name: test-26661695-charmed-postgresql-snap
 base: core24
 version: '16.13'
 summary: PostgreSQL in a snap.
