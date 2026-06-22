@@ -37,16 +37,24 @@ from ops import (
     WaitingStatus,
 )
 from ops.pebble import ChangeError
+from single_kernel_postgresql.config.literals import (
+    APP_SCOPE,
+    PEER_RELATION,
+    REPLICATION_CONSUMER_RELATION,
+    REPLICATION_OFFER_RELATION,
+)
+from single_kernel_postgresql.config.literals import (
+    K8S_WORKLOAD_OS_GROUP as WORKLOAD_OS_GROUP,
+)
+from single_kernel_postgresql.config.literals import (
+    K8S_WORKLOAD_OS_USER as WORKLOAD_OS_USER,
+)
 from tenacity import RetryError, Retrying, stop_after_delay, wait_fixed
 
 from constants import (
-    APP_SCOPE,
     ARCHIVE_PATH,
     LOGS_STORAGE_PATH,
-    PEER,
     TEMP_STORAGE_PATH,
-    WORKLOAD_OS_GROUP,
-    WORKLOAD_OS_USER,
 )
 from patroni import ClusterNotPromotedError, NotReadyError, StandbyClusterAlreadyPromotedError
 
@@ -54,8 +62,6 @@ logger = logging.getLogger(__name__)
 
 
 READ_ONLY_MODE_BLOCKING_MESSAGE = "Standalone read-only cluster"
-REPLICATION_CONSUMER_RELATION = "replication"
-REPLICATION_OFFER_RELATION = "replication-offer"
 # Labels are not confidential
 SECRET_LABEL = "async-replication-secret"  # noqa: S105
 
@@ -276,7 +282,9 @@ class PostgreSQLAsyncReplication(Object):
 
     def _get_secret(self) -> Secret:
         """Return async replication necessary secrets."""
-        app_secret = self.charm.model.get_secret(label=f"{PEER}.{self.model.app.name}.app")
+        app_secret = self.charm.model.get_secret(
+            label=f"{PEER_RELATION}.{self.model.app.name}.app"
+        )
         content = app_secret.peek_content()
 
         # Filter out unnecessary secrets.
@@ -623,7 +631,7 @@ class PostgreSQLAsyncReplication(Object):
 
         if (
             relation.name == REPLICATION_OFFER_RELATION
-            and event.secret.label == f"{PEER}.{self.model.app.name}.app"
+            and event.secret.label == f"{PEER_RELATION}.{self.model.app.name}.app"
         ):
             logger.info("Internal secret changed, updating relation secret")
             secret = self._get_secret()

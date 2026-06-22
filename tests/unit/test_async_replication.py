@@ -6,12 +6,15 @@ from unittest.mock import PropertyMock, patch
 
 import pytest
 from ops.testing import Harness
-
-from charm import PostgresqlOperatorCharm
-from constants import APP_SCOPE, PEER
-from relations.async_replication import (
+from single_kernel_postgresql.config.literals import (
+    APP_SCOPE,
+    PEER_RELATION,
     REPLICATION_CONSUMER_RELATION,
     REPLICATION_OFFER_RELATION,
+)
+
+from charm import PostgresqlOperatorCharm
+from relations.async_replication import (
     SECRET_LABEL,
 )
 
@@ -67,7 +70,7 @@ def test_on_async_relation_broken(harness, is_leader, relation_name):
 
         # Test the departing unit.
         with harness.hooks_disabled():
-            peer_rel_id = harness.add_relation(PEER, harness.charm.app.name)
+            peer_rel_id = harness.add_relation(PEER_RELATION, harness.charm.app.name)
             harness.update_relation_data(
                 peer_rel_id,
                 harness.charm.app.name,
@@ -143,7 +146,7 @@ def test_on_async_relation_created(harness, relation_name):
     ):
         # Test in a standby cluster.
         with harness.hooks_disabled():
-            peer_rel_id = harness.add_relation(PEER, harness.charm.app.name)
+            peer_rel_id = harness.add_relation(PEER_RELATION, harness.charm.app.name)
         rel_id = harness.add_relation(relation_name, harness.charm.app.name)
         assert harness.get_relation_data(rel_id, harness.charm.unit.name) == {
             "unit-address": "1.1.1.1"
@@ -167,7 +170,7 @@ def test_on_async_relation_created(harness, relation_name):
 def test_on_async_relation_departed(harness, relation_name):
     # Test the departing unit.
     with harness.hooks_disabled():
-        peer_rel_id = harness.add_relation(PEER, harness.charm.app.name)
+        peer_rel_id = harness.add_relation(PEER_RELATION, harness.charm.app.name)
         rel_id = harness.add_relation(relation_name, harness.charm.app.name)
         harness.add_relation_unit(rel_id, harness.charm.unit.name)
     harness.remove_relation_unit(rel_id, harness.charm.unit.name)
@@ -189,7 +192,7 @@ def test_on_async_relation_changed(harness, wait_for_standby):
         return_value="1.1.1.1",
     ) as _get_unit_ip:
         harness.add_relation(
-            PEER,
+            PEER_RELATION,
             harness.charm.app.name,
             unit_data={"unit-address": "10.1.1.10"},
             app_data={"promoted-cluster-counter": "1"},
@@ -270,7 +273,7 @@ def test_create_replication(harness, relation_name):
             {"password": "password"}, label="database-peers.postgresql-k8s.app"
         )
         with harness.hooks_disabled():
-            harness.add_relation(PEER, harness.charm.app.name)
+            harness.add_relation(PEER_RELATION, harness.charm.app.name)
         rel_id = harness.add_relation(
             relation_name, harness.charm.app.name, unit_data={"unit-address": "10.1.1.10"}
         )
@@ -307,7 +310,7 @@ def test_promote_to_primary(harness, relation_name):
     ):
         with harness.hooks_disabled():
             harness.add_relation(
-                PEER, harness.charm.app.name, unit_data={"unit-address": "10.1.1.10"}
+                PEER_RELATION, harness.charm.app.name, unit_data={"unit-address": "10.1.1.10"}
             )
             rel_id = harness.add_relation(
                 relation_name, "standby", app_data={"promoted-cluster-counter": "1"}
@@ -331,13 +334,13 @@ def test_on_secret_changed(harness, relation_name):
         return_value="1.1.1.1",
     ) as _get_unit_ip:
         secret_id = harness.add_model_secret("primary", {"operator-password": "old"})
-        peer_rel_id = harness.add_relation(PEER, "primary")
+        peer_rel_id = harness.add_relation(PEER_RELATION, "primary")
         rel_id = harness.add_relation(
             relation_name, harness.charm.app.name, unit_data={"unit-address": "10.1.1.10"}
         )
 
     secret_label = (
-        f"{PEER}.{harness.charm.app.name}.app"
+        f"{PEER_RELATION}.{harness.charm.app.name}.app"
         if relation_name == REPLICATION_OFFER_RELATION
         else SECRET_LABEL
     )

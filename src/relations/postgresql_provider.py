@@ -11,6 +11,13 @@ from charms.data_platform_libs.v0.data_interfaces import DatabaseProvides, Datab
 from ops.charm import RelationBrokenEvent, RelationDepartedEvent
 from ops.framework import Object
 from ops.model import ActiveStatus, BlockedStatus, ModelError, Relation
+from single_kernel_postgresql.config.literals import (
+    APP_SCOPE,
+    DATABASE_MAPPING_LABEL,
+    DATABASE_PORT,
+    SYSTEM_USERS,
+    USERNAME_MAPPING_LABEL,
+)
 from single_kernel_postgresql.utils import new_password
 from single_kernel_postgresql.utils.postgresql import (
     ACCESS_GROUP_RELATION,
@@ -22,14 +29,6 @@ from single_kernel_postgresql.utils.postgresql import (
     PostgreSQLCreateUserError,
     PostgreSQLDeleteUserError,
     PostgreSQLGetPostgreSQLVersionError,
-)
-
-from constants import (
-    APP_SCOPE,
-    DATABASE_MAPPING_LABEL,
-    DATABASE_PORT,
-    SYSTEM_USERS,
-    USERNAME_MAPPING_LABEL,
 )
 
 logger = logging.getLogger(__name__)
