@@ -4,22 +4,13 @@ name: Release to Charmhub edge
 
 on:
   push:
-    branches:
-      - '*/edge'
-    paths-ignore:
-      - 'tests/**'
-      - .github/renovate.json5
-      - pyproject.toml
-      - '.github/workflows/ci.yaml'
-      - '.github/workflows/lib-check.yaml'
-      - '.github/workflows/sync_docs.yaml'
 
 jobs:
   tag:
     name: Create charm refresh compatibility version git tag
     uses: canonical/data-platform-workflows/.github/workflows/tag_charm_edge.yaml@v50.1.0
     with:
-      track: '16'
+      track: 'latest'
     permissions:
       contents: write  # Needed to create git tag
 
@@ -28,24 +19,17 @@ jobs:
     needs:
       - tag
     uses: ./.github/workflows/ci.yaml
-    secrets:
-      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-      GCP_ACCESS_KEY: ${{ secrets.GCP_ACCESS_KEY }}
-      GCP_SECRET_KEY: ${{ secrets.GCP_SECRET_KEY }}
-    permissions:
-      contents: write  # Needed for Allure Report
 
   release:
     name: Release charm
     needs:
       - tag
       - ci-tests
-    uses: canonical/data-platform-workflows/.github/workflows/release_charm_edge.yaml@v50.1.0
+    uses: canonical/data-platform-workflows/.github/workflows/release_charm_edge.yaml@charmcraft-candid
     with:
       track: ${{ needs.tag.outputs.track }}
       artifact-prefix: ${{ needs.ci-tests.outputs.artifact-prefix }}
     secrets:
-      charmhub-token: ${{ secrets.CHARMHUB_TOKEN }}
+      charmhub-token: ${{ secrets.CHARMHUB_TOKEN_EDGE }}
     permissions:
       contents: write  # Needed to create git tags
