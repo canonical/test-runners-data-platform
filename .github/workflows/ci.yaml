@@ -8,6 +8,7 @@ concurrency:
 
 on:
   # Triggered on push by .github/workflows/release.yaml
+  pull_request:
   workflow_call:
     outputs:
       artifact-prefix:
@@ -18,5 +19,20 @@ jobs:
   build:
     name: Build charm
     uses: canonical/data-platform-workflows/.github/workflows/build_charm.yaml@v50.1.0
+    permissions:
+      contents: read
+
+  release:
+    name: Release charm to Charmhub branch
+    if: ${{ github.event_name == 'pull_request' }}
+    needs:
+      - build
+    uses: canonical/data-platform-workflows/.github/workflows/release_charm_pr.yaml@charmcraft-candid
+    with:
+      track: 'latest'
+      artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
+      charmcraft-snap-revision: 8137  # 4.4.0 (edge release)
+    secrets:
+      charmhub-token: ${{ secrets.CHARMHUB_TOKEN_EDGE_PR }}
     permissions:
       contents: read
