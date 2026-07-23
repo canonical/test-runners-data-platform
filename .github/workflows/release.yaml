@@ -4,6 +4,8 @@ name: Release to Charmhub edge
 
 on:
   push:
+    branches:
+      - main
 
 jobs:
   tag:
